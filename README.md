@@ -513,8 +513,9 @@ Semua perubahan — baik feature maupun fix — **wajib** melalui Pull Request. 
 
 **Aturan branch protection sudah dikonfigurasi dengan `enforce_admins: true`** —
 berlaku untuk **semua orang, termasuk repo owner**. Tidak ada yang bisa push
-langsung ke `main`. Setiap PR harus di-approve manual via GitHub UI sebelum
-bisa di-merge.
+langsung ke `main`. Setiap perubahan wajib lewat Pull Request, lalu di-merge
+manual via GitHub UI. Untuk solo developer, reviewer tidak diwajibkan (0 required
+reviews) — kamu bisa create PR, review sendiri, dan merge.
 
 Lihat [CONTRIBUTING.md](CONTRIBUTING.md) untuk detail lengkap.
 

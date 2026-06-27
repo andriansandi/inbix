@@ -114,9 +114,8 @@ chore: bump dependencies
 **Branch protection rules** on `main` (dengan `enforce_admins: true`):
 - **Berlaku untuk semua orang, termasuk repo owner** — tidak ada push langsung ke `main`
 - Require pull request before merging
-- Require approval (at least 1 reviewer) — manual approve via GitHub UI
+- Reviewer tidak diwajibkan (0 required reviews) — solo developer bisa merge PR sendiri
 - Require status checks to pass (CI: Type Check, Build, Security Audit)
-- Require conversation resolution
 - No force push, no branch deletion
 - Require linear history
 
