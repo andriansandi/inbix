@@ -12,7 +12,7 @@ interface MessageViewerProps {
   onBack: () => void;
 }
 
-export function MessageViewer({ messageId, inboxId, onDelete, onBack }: MessageViewerProps) {
+export function MessageViewer({ messageId, onDelete, onBack }: MessageViewerProps) {
   const [message, setMessage] = useState<Message | null>(null);
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const [loading, setLoading] = useState(false);

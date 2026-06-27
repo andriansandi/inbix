@@ -1,4 +1,4 @@
-import { Mail, Paperclip, RefreshCw, Trash2, ArrowLeft } from "lucide-react";
+import { Mail, Paperclip, RefreshCw, ArrowLeft } from "lucide-react";
 import type { MessageSummary } from "@inbix/shared";
 import { formatRelativeTime, getInitials, cn } from "../lib/utils";
 

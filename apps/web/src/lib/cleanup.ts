@@ -1,4 +1,4 @@
-import type { HonoEnv } from "@inbix/shared";
+import type { HonoEnv } from "../lib/env";
 import {
   createDatabase,
   getExpiredInboxIds,

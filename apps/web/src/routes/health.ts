@@ -1,10 +1,10 @@
 import { Hono } from "hono";
-import type { HonoEnv } from "@inbix/shared";
+import type { HonoEnv } from "../lib/env";
 import { json } from "@inbix/shared";
 
 export const healthRoutes = new Hono<HonoEnv>();
 
-healthRoutes.get("/health", (c) => {
+healthRoutes.get("/health", () => {
   return json({
     success: true,
     data: {

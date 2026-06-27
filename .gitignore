@@ -6,7 +6,10 @@ node_modules/
 dist/
 build/
 .wrangler/
+.mf/
 *.tsbuildinfo
+apps/web/public/*
+!apps/web/public/.gitkeep
 
 # Environment
 .env

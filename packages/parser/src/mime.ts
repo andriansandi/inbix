@@ -35,13 +35,33 @@ export async function parseEmail(rawEmail: ArrayBuffer | string): Promise<Parsed
     ? parsed.headers.map((h) => `${h.key}: ${h.value}`).join("\r\n")
     : null;
 
-  const attachments: ParsedAttachment[] = (parsed.attachments ?? []).map((att) => ({
-    filename: att.filename || "unnamed",
-    contentType: att.mimeType || "application/octet-stream",
-    size: att.content?.byteLength ?? 0,
-    contentId: att.contentId ?? null,
-    content: new Uint8Array(att.content ?? new ArrayBuffer(0)),
-  }));
+  const attachments: ParsedAttachment[] = (parsed.attachments ?? []).map((att) => {
+    const rawContent = att.content;
+    let content: Uint8Array;
+    let size: number;
+
+    if (typeof rawContent === "string") {
+      content = new TextEncoder().encode(rawContent);
+      size = content.byteLength;
+    } else if (rawContent instanceof ArrayBuffer) {
+      content = new Uint8Array(rawContent);
+      size = rawContent.byteLength;
+    } else if (rawContent) {
+      content = new Uint8Array(rawContent);
+      size = rawContent.byteLength;
+    } else {
+      content = new Uint8Array(0);
+      size = 0;
+    }
+
+    return {
+      filename: att.filename || "unnamed",
+      contentType: att.mimeType || "application/octet-stream",
+      size,
+      contentId: att.contentId ?? null,
+      content,
+    };
+  });
 
   return {
     fromAddress,

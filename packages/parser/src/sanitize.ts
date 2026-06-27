@@ -79,8 +79,8 @@ export function sanitizeHtml(html: string): string {
     } else if (token.type === "comment" || token.type === "doctype") {
       continue;
     } else if (token.type === "open") {
-      const tag = token.tag.toLowerCase();
-      if (!ALLOWED_TAGS.has(tag)) continue;
+      const tag = (token.tag ?? "").toLowerCase();
+      if (!tag || !ALLOWED_TAGS.has(tag)) continue;
 
       if (tag === "script" || tag === "style" || tag === "iframe" || tag === "object" || tag === "embed") {
         continue;
@@ -89,7 +89,7 @@ export function sanitizeHtml(html: string): string {
       const allowedForTag = ALLOWED_ATTRS[tag] ?? new Set<string>();
       let attrs = "";
 
-      for (const [name, value] of token.attrs) {
+      for (const [name, value] of token.attrs ?? []) {
         const lowerName = name.toLowerCase();
         if (!allowedForTag.has(lowerName)) continue;
         if (lowerName.startsWith("on")) continue;
@@ -108,8 +108,8 @@ export function sanitizeHtml(html: string): string {
         depth++;
       }
     } else if (token.type === "close") {
-      const tag = token.tag.toLowerCase();
-      if (!ALLOWED_TAGS.has(tag)) continue;
+      const tag = (token.tag ?? "").toLowerCase();
+      if (!tag || !ALLOWED_TAGS.has(tag)) continue;
       if (VOID_TAGS.has(tag)) continue;
 
       const idx = openTags.lastIndexOf(tag);

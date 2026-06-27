@@ -1,5 +1,5 @@
 import { createMiddleware } from "hono/factory";
-import type { HonoEnv } from "@inbix/shared";
+import type { HonoEnv } from "../lib/env";
 import { generateRequestToken } from "@inbix/shared";
 
 export const requestId = createMiddleware<HonoEnv>(async (c, next) => {

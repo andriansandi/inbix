@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import type { HonoEnv } from "@inbix/shared";
+import type { HonoEnv } from "../lib/env";
 import { json, errorResponse, addDomainSchema } from "@inbix/shared";
 import { createDatabase, listDomains, addDomain } from "@inbix/database";
 

@@ -26,7 +26,7 @@ export function DashboardPage() {
   const [mobileView, setMobileView] = useState<"inboxes" | "messages" | "viewer">("inboxes");
 
   const currentInboxId = inboxId ?? null;
-  const { inbox, messages, loading, error, refresh } = useInbox(currentInboxId);
+  const { inbox, messages, loading, refresh } = useInbox(currentInboxId);
 
   const fetchInboxList = useCallback(async () => {
     setListLoading(true);

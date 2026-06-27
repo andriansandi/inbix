@@ -1,7 +1,7 @@
 import { createApp } from "./app";
 import { handleEmail } from "./email/handler";
 import { cleanupExpiredData } from "./lib/cleanup";
-import type { HonoEnv, EmailEnv } from "@inbix/shared";
+import type { HonoEnv, EmailEnv } from "./lib/env";
 
 const app = createApp();
 
