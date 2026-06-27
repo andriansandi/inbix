@@ -15,7 +15,7 @@
     {
       "binding": "DB",
       "database_name": "inbix",
-      "database_id": "<your-d1-database-id>"
+      "database_id": "3be8814b-4ef7-424f-83b7-be50e3049569"
     }
   ],
 
@@ -29,11 +29,11 @@
   "kv_namespaces": [
     {
       "binding": "CACHE",
-      "id": "<your-kv-cache-id>"
+      "id": "a1d892bd4326402f86f08ec60ccf6853"
     },
     {
       "binding": "RATE_LIMIT_KV",
-      "id": "<your-kv-rate-limit-id>"
+      "id": "756a951c8de9427b8d96238506a4ccdf"
     }
   ],
 
