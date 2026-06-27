@@ -1,0 +1,25 @@
+---
+name: Configuration Question
+about: Ask about configuring or deploying Inbix
+title: "[question] "
+labels: ["question", "triage"]
+assignees: []
+---
+
+## What do you need help with?
+
+A clear description of what you're trying to achieve.
+
+## What have you tried?
+
+Steps you've already taken to solve the problem.
+
+## Environment
+
+- **Inbix version**: [e.g., v0.1.0]
+- **Deployment**: [self-hosted, local dev]
+- **Cloudflare plan**: [free, paid]
+
+## Additional context
+
+Any other details that might help.

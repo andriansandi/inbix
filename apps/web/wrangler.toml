@@ -1,0 +1,49 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "inbix"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Static Assets (dashboard build output)
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+# D1 Database
+[[d1_databases]]
+binding = "DB"
+database_name = "inbix"
+database_id = "<your-d1-database-id>"
+
+# R2 Bucket (attachments)
+[[r2_buckets]]
+binding = "R2_BUCKET"
+bucket_name = "inbix-attachments"
+
+# KV Namespace (cache + rate limiting)
+[[kv_namespaces]]
+binding = "CACHE"
+id = "<your-kv-cache-id>"
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "<your-kv-rate-limit-id>"
+
+# Email Routing
+[triggers]
+# Configure email routing in Cloudflare Dashboard:
+# Email > Routing > Routes > Send to Worker
+
+# Environment Variables
+[vars]
+ENVIRONMENT = "production"
+APP_DOMAIN = "inbix.xyz"
+CORS_ORIGIN = "https://inbix.xyz"
+
+# Secrets (set via: wrangler secret put <NAME>)
+# - No secrets required for MVP
+
+# Observability
+[observability]
+enabled = true

@@ -1,0 +1,37 @@
+---
+name: Feature Request
+about: Suggest a feature for Inbix
+title: "[feature] "
+labels: ["enhancement", "triage"]
+assignees: []
+---
+
+## Feature description
+
+A clear and concise description of the feature you'd like to see.
+
+## Problem it solves
+
+What problem does this feature solve? What use case does it address?
+
+## Proposed solution
+
+Describe the solution you'd like. If you have ideas about implementation, share them here.
+
+## Alternatives considered
+
+Have you considered any alternatives?
+
+## Target users
+
+Who would benefit from this feature? (e.g., developers, QA engineers, automation)
+
+## Additional context
+
+Add any other context, mockups, or references here.
+
+## Would you be willing to contribute?
+
+- [ ] I'd like to work on this feature
+- [ ] I can help test it
+- [ ] I'm available for design feedback

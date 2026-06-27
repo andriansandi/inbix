@@ -1,0 +1,26 @@
+{
+  "name": "@inbix/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "build": "wrangler deploy --dry-run",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "tail": "wrangler tail"
+  },
+  "dependencies": {
+    "@inbix/database": "workspace:*",
+    "@inbix/parser": "workspace:*",
+    "@inbix/shared": "workspace:*",
+    "hono": "^4.6.0",
+    "drizzle-orm": "^0.38.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.0",
+    "@cloudflare/workers-types": "^4.20250101.0",
+    "wrangler": "^3.99.0"
+  }
+}

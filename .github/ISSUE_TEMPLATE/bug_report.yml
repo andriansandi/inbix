@@ -1,0 +1,46 @@
+---
+name: Bug Report
+about: Report a bug to help us improve Inbix
+title: "[bug] "
+labels: ["bug", "triage"]
+assignees: []
+---
+
+## Describe the bug
+
+A clear and concise description of what the bug is.
+
+## Steps to reproduce
+
+1. Go to '...'
+2. Click on '...'
+3. See error
+
+## Expected behavior
+
+What you expected to happen.
+
+## Actual behavior
+
+What actually happened.
+
+## Screenshots
+
+If applicable, add screenshots to help explain your problem.
+
+## Environment
+
+- **Inbix version**: [e.g., v0.1.0]
+- **Deployment**: [self-hosted, demo]
+- **Browser**: [e.g., Chrome 131, Firefox 134]
+- **OS**: [e.g., macOS, Linux, Windows]
+
+## Additional context
+
+Add any other context about the problem here.
+
+## Logs
+
+```
+Paste any relevant Worker logs (wrangler tail) or browser console errors here.
+```
