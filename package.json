@@ -25,7 +25,8 @@
   },
   "devDependencies": {
     "turbo": "^2.5.0",
-    "typescript": "^5.8.0"
+    "typescript": "^5.8.0",
+    "wrangler": "^3.99.0"
   },
   "packageManager": "pnpm@11.9.0",
   "engines": {
