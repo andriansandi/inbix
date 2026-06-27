@@ -1,12 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import {
-  Plus,
-  Mail,
-  Trash2,
-  RefreshCw,
-  ArrowLeft,
-} from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Plus, Trash2, RefreshCw, ArrowLeft, Inbox as InboxIcon, MessageSquare } from "lucide-react";
 import type { Inbox } from "@inbix/shared";
 import { api } from "../lib/api";
 import { getStoredInboxes, addStoredInbox, removeStoredInbox } from "../lib/inboxStorage";
@@ -15,6 +9,8 @@ import { CopyButton } from "../components/CopyButton";
 import { ExpiryTimer } from "../components/ExpiryTimer";
 import { MessageList } from "../components/MessageList";
 import { MessageViewer } from "../components/MessageViewer";
+import { EmptyState } from "../components/EmptyState";
+import { DashboardNav } from "../components/Navbar";
 import { formatRelativeTime, cn } from "../lib/utils";
 
 export function DashboardPage() {
@@ -89,27 +85,9 @@ export function DashboardPage() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-background">
-      {/* Header */}
-      <header className="flex items-center justify-between border-b border-border px-4 py-3">
-        <div className="flex items-center gap-2">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
-              <Mail className="h-4 w-4 text-white" />
-            </div>
-            <span className="text-sm font-semibold">Inbix</span>
-          </Link>
-        </div>
-        <button
-          onClick={handleCreateInbox}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-        >
-          <Plus className="h-4 w-4" />
-          New Inbox
-        </button>
-      </header>
+    <div className="flex h-[100dvh] flex-col bg-background">
+      <DashboardNav />
 
-      {/* Main content - 3 columns */}
       <div className="flex flex-1 overflow-hidden">
         {/* Inbox list */}
         <aside
@@ -123,20 +101,32 @@ export function DashboardPage() {
             <button
               onClick={fetchInboxList}
               disabled={listLoading}
-              className="rounded-md p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
+              className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-50"
+              aria-label="Refresh inbox list"
             >
               <RefreshCw className={cn("h-3.5 w-3.5", listLoading && "animate-spin")} />
             </button>
           </div>
-          <div className="overflow-y-auto" style={{ height: "calc(100vh - 100px)" }}>
+
+          <div className="p-3">
+            <button
+              onClick={handleCreateInbox}
+              className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
+            >
+              <Plus className="h-4 w-4" />
+              New Inbox
+            </button>
+          </div>
+
+          <div className="overflow-y-auto" style={{ height: "calc(100dvh - 160px)" }}>
             {inboxList.length === 0 ? (
-              <div className="flex flex-col items-center gap-2 p-6 text-center">
+              <div className="px-4 py-8 text-center">
                 <p className="text-sm text-muted-foreground">No inboxes yet</p>
                 <button
                   onClick={handleCreateInbox}
-                  className="text-xs font-medium text-primary hover:underline"
+                  className="mt-2 text-xs font-medium text-primary hover:underline"
                 >
-                  Create one →
+                  Create one
                 </button>
               </div>
             ) : (
@@ -146,15 +136,16 @@ export function DashboardPage() {
                     key={box.id}
                     onClick={() => handleSelectInbox(box.id)}
                     className={cn(
-                      "group flex w-full flex-col gap-1 px-4 py-3 text-left transition-colors hover:bg-accent/50",
+                      "group flex w-full flex-col gap-1.5 px-4 py-3 text-left transition-colors hover:bg-accent/50",
                       currentInboxId === box.id && "bg-accent"
                     )}
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <span className="truncate text-sm font-medium">{box.emailAddress}</span>
+                      <span className="truncate font-mono text-xs font-medium">{box.emailAddress}</span>
                       <button
                         onClick={(e) => handleDeleteInbox(box.id, e)}
-                        className="shrink-0 rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:text-red-500 group-hover:opacity-100"
+                        className="shrink-0 rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100"
+                        aria-label="Delete inbox"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
@@ -186,13 +177,14 @@ export function DashboardPage() {
                   <button
                     onClick={() => setMobileView("inboxes")}
                     className="rounded-md p-1 text-muted-foreground hover:bg-accent hover:text-foreground lg:hidden"
+                    aria-label="Back to inboxes"
                   >
                     <ArrowLeft className="h-4 w-4" />
                   </button>
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="truncate text-sm font-semibold">{inbox.emailAddress}</span>
-                      <CopyButton text={inbox.emailAddress} />
+                    <div className="flex items-center gap-1.5">
+                      <span className="truncate font-mono text-sm font-semibold">{inbox.emailAddress}</span>
+                      <CopyButton text={inbox.emailAddress} variant="compact" />
                     </div>
                   </div>
                 </div>
@@ -210,17 +202,20 @@ export function DashboardPage() {
               />
             </>
           ) : (
-            <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
-              <div className="rounded-full bg-muted p-6">
-                <Mail className="h-8 w-8 text-muted-foreground" />
-              </div>
-              <div>
-                <p className="text-sm font-medium">No inbox selected</p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Select an inbox or create a new one
-                </p>
-              </div>
-            </div>
+            <EmptyState
+              icon={InboxIcon}
+              title="No inbox selected"
+              description="Select an inbox from the list or create a new one to get started."
+              action={
+                <button
+                  onClick={handleCreateInbox}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
+                >
+                  <Plus className="h-4 w-4" />
+                  New Inbox
+                </button>
+              }
+            />
           )}
         </div>
 
@@ -243,9 +238,11 @@ export function DashboardPage() {
               onBack={() => setMobileView("messages")}
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-              Select an inbox to get started
-            </div>
+            <EmptyState
+              icon={MessageSquare}
+              title="No message selected"
+              description="Select an inbox and choose a message to read its content."
+            />
           )}
         </main>
       </div>

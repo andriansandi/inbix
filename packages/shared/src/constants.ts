@@ -1,5 +1,5 @@
 export const APP_NAME = "Inbix";
-export const APP_TAGLINE = "Open Source Disposable Email Platform powered by Cloudflare Workers";
+export const APP_TAGLINE = "Open Source Cloudflare-native Email API Platform";
 export const APP_URL = "https://inbix.xyz";
 export const APP_VERSION = "0.1.0";
 

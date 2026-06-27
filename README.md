@@ -2,9 +2,9 @@
 
 # Inbix
 
-### Open Source Disposable Email Platform powered by Cloudflare Workers
+### Open Source Cloudflare-native Email API Platform
 
-The easiest disposable email platform to self-host. No Docker, no VPS, no SMTP server management — everything runs on Cloudflare.
+Programmable email inboxes on Cloudflare's edge. Generate inboxes, receive emails, and automate through REST APIs, SDKs, and MCP. No SMTP, no Docker, no VPS.
 
 [![Deploy](https://img.shields.io/badge/deploy-cloudflare-F97316?style=flat-square)](https://workers.cloudflare.com)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
@@ -28,31 +28,32 @@ That's it. You now have a working disposable email service running on Cloudflare
 
 ## Features
 
-### MVP (v0.1)
+### Core Platform (v0.1)
 
-- **Generate random inbox** — One click to get a disposable email address
-- **Receive email** — Powered by Cloudflare Email Workers
-- **Inbox list** — Manage multiple inboxes
-- **Read HTML email** — Sanitized and rendered in a sandboxed iframe
-- **Read plain text** — Toggle between HTML and plain text views
-- **Attachments** — Download attachments up to 10MB (stored in R2)
-- **Auto expiration** — Inboxes expire automatically (configurable TTL)
-- **Copy email** — Copy address to clipboard
-- **Delete inbox** — Clean up manually or let it expire
-- **Real-time updates** — New messages appear instantly via SSE
+- **Generate inbox**: One click or one API call to get a programmable email address
+- **Receive email**: Powered by Cloudflare Email Workers
+- **Inbox list**: Manage multiple inboxes with auto-expiration
+- **Read HTML email**: Sanitized and rendered in a sandboxed iframe
+- **Read plain text**: Toggle between HTML and plain text views
+- **Attachments**: Download attachments up to 10MB (stored in R2)
+- **Auto expiration**: Inboxes expire automatically (configurable TTL)
+- **Copy email**: Copy address to clipboard
+- **Delete inbox**: Clean up manually or let it expire
+- **Real-time updates**: New messages appear instantly via SSE
+- **REST API**: Full REST API for automation, CI/CD, and integrations
+- **TypeScript SDK**: Official SDK for JavaScript and TypeScript
 
 ### Roadmap
 
-- Custom usernames
-- Multiple domains support
-- REST API with API keys
-- Webhooks
-- Full-text search
-- Rate limiting (dashboard)
-- Analytics
-- Admin dashboard
-- Spam protection
-- Multi-tenant support
+- API key authentication with per-key rate limiting
+- Custom usernames and multiple domains
+- Webhooks for event-driven workflows
+- Full-text search across messages
+- Official SDKs (Python, Go, PHP, Java, C#)
+- MCP Server for AI agents (Claude, Cursor, Windsurf)
+- Clerk authentication and Stripe billing
+- Team workspaces and shared inboxes
+- Analytics and audit logs
 
 ## Architecture
 

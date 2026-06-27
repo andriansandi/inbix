@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Trash2, Paperclip, Download, ArrowLeft, Mail } from "lucide-react";
+import { Trash2, Paperclip, Download, ArrowLeft, MessageSquare } from "lucide-react";
 import type { Message, Attachment } from "@inbix/shared";
 import { api } from "../lib/api";
-import { formatRelativeTime, formatBytes } from "../lib/utils";
+import { formatRelativeTime, formatBytes, cn } from "../lib/utils";
 import { CopyButton } from "./CopyButton";
+import { EmptyState } from "./EmptyState";
 
 interface MessageViewerProps {
   messageId: string | null;
@@ -42,17 +43,11 @@ export function MessageViewer({ messageId, onDelete, onBack }: MessageViewerProp
 
   if (!messageId) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
-        <div className="rounded-full bg-muted p-6">
-          <Mail className="h-8 w-8 text-muted-foreground" />
-        </div>
-        <div>
-          <p className="text-sm font-medium">Select a message to read</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Messages will appear here when received
-          </p>
-        </div>
-      </div>
+      <EmptyState
+        icon={MessageSquare}
+        title="Select a message"
+        description="Choose a message from the list to read its content."
+      />
     );
   }
 
@@ -68,11 +63,12 @@ export function MessageViewer({ messageId, onDelete, onBack }: MessageViewerProp
 
   return (
     <div className="flex h-full flex-col">
-      <div className="border-b border-border px-4 py-3">
+      <div className="border-b border-border px-4 py-3 md:px-6">
         <div className="flex items-center justify-between">
           <button
             onClick={onBack}
             className="rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground lg:hidden"
+            aria-label="Back to messages"
           >
             <ArrowLeft className="h-4 w-4" />
           </button>
@@ -83,19 +79,20 @@ export function MessageViewer({ messageId, onDelete, onBack }: MessageViewerProp
                   api.deleteMessage(message.id).then(onDelete);
                 }
               }}
-              className="rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-red-500"
+              className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-destructive"
+              aria-label="Delete message"
             >
               <Trash2 className="h-4 w-4" />
             </button>
           </div>
         </div>
 
-        <h1 className="mt-2 text-lg font-semibold">
+        <h1 className="mt-3 text-lg font-semibold tracking-tight">
           {message.subject ?? "(no subject)"}
         </h1>
 
-        <div className="mt-2 flex items-start gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary text-sm font-medium">
+        <div className="mt-3 flex items-start gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary text-sm font-medium text-secondary-foreground">
             {(message.fromName ?? message.fromAddress).charAt(0).toUpperCase()}
           </div>
           <div className="min-w-0 flex-1">
@@ -103,36 +100,38 @@ export function MessageViewer({ messageId, onDelete, onBack }: MessageViewerProp
               <span className="text-sm font-medium">
                 {message.fromName ?? message.fromAddress}
               </span>
-              <CopyButton text={message.fromAddress} />
+              <CopyButton text={message.fromAddress} variant="compact" />
             </div>
             <p className="text-xs text-muted-foreground">
-              {message.fromAddress} · {formatRelativeTime(message.receivedAt)}
+              {message.fromAddress} <span className="text-border">/</span> {formatRelativeTime(message.receivedAt)}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center gap-1 border-b border-border px-4 py-2">
+      <div className="flex items-center gap-1 border-b border-border px-4 py-2 md:px-6">
         <button
           onClick={() => setView("html")}
-          className={`rounded-md px-3 py-1 text-xs font-medium transition-colors ${
+          className={cn(
+            "rounded-md px-3 py-1 text-xs font-medium transition-colors",
             view === "html" ? "bg-accent text-foreground" : "text-muted-foreground hover:text-foreground"
-          }`}
+          )}
         >
           HTML
         </button>
         <button
           onClick={() => setView("text")}
-          className={`rounded-md px-3 py-1 text-xs font-medium transition-colors ${
+          className={cn(
+            "rounded-md px-3 py-1 text-xs font-medium transition-colors",
             view === "text" ? "bg-accent text-foreground" : "text-muted-foreground hover:text-foreground"
-          }`}
+          )}
         >
           Plain Text
         </button>
       </div>
 
       {attachments.length > 0 && (
-        <div className="border-b border-border px-4 py-3">
+        <div className="border-b border-border px-4 py-3 md:px-6">
           <div className="mb-2 flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
             <Paperclip className="h-3 w-3" />
             {attachments.length} Attachment{attachments.length > 1 ? "s" : ""}
@@ -143,7 +142,7 @@ export function MessageViewer({ messageId, onDelete, onBack }: MessageViewerProp
                 key={att.id}
                 href={api.getAttachmentUrl(message.id, att.id)}
                 download={att.filename}
-                className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-xs transition-colors hover:bg-accent"
+                className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-xs transition-colors hover:bg-accent active:scale-[0.98]"
               >
                 <Download className="h-3 w-3" />
                 <span className="max-w-32 truncate">{att.filename}</span>
@@ -154,11 +153,11 @@ export function MessageViewer({ messageId, onDelete, onBack }: MessageViewerProp
         </div>
       )}
 
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6">
         {view === "html" ? (
           <iframe
             src={api.getMessageHtmlUrl(message.id)}
-            title="Email HTML"
+            title="Email content"
             sandbox="allow-same-origin"
             className="h-full w-full rounded-lg border border-border bg-white"
           />

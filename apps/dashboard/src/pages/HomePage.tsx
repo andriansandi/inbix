@@ -1,147 +1,173 @@
 import { Link } from "react-router-dom";
 import {
-  Mail,
-  Zap,
-  Shield,
-  Globe,
-  Github,
   ArrowRight,
   Terminal,
-  Layers,
-  Lock,
+  Zap,
+  Radio,
+  Shield,
+  Globe,
   Server,
   Database,
   Cloud,
+  Waypoints,
+  Code2,
+  GitBranch,
   CheckCircle2,
+  Boxes,
+  KeyRound,
+  Webhook,
+  Bot,
 } from "lucide-react";
+import { Navbar } from "../components/Navbar";
+import { Footer } from "../components/Footer";
 
 export function HomePage() {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Nav */}
-      <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <Mail className="h-5 w-5 text-white" />
-            </div>
-            <span className="text-lg font-semibold">Inbix</span>
-          </div>
-          <div className="flex items-center gap-6">
-            <a href="#features" className="text-sm text-muted-foreground hover:text-foreground">Features</a>
-            <a href="#architecture" className="text-sm text-muted-foreground hover:text-foreground">Architecture</a>
-            <a href="#deploy" className="text-sm text-muted-foreground hover:text-foreground">Deploy</a>
-            <a
-              href="https://github.com/andriansandi/inbix"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
-            >
-              <Github className="h-4 w-4" />
-              GitHub
-            </a>
-            <Link
-              to="/dashboard"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-            >
-              Open Dashboard
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-[100dvh] bg-background">
+      <Navbar />
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
-          <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
-              <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              Open Source · Cloudflare Native · No SMTP
-            </div>
-            <h1 className="text-balance text-5xl font-bold tracking-tight md:text-6xl">
-              Disposable Email,
-              <br />
-              <span className="text-primary">Powered by Cloudflare</span>
-            </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-balance text-lg text-muted-foreground">
-              The easiest disposable email platform to self-host. Clone, install,
-              deploy — done. No Docker, no VPS, no SMTP server management.
-            </p>
-            <div className="mt-8 flex items-center justify-center gap-3">
-              <Link
-                to="/dashboard"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-              >
-                Try Live Demo
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <a
-                href="#deploy"
-                className="inline-flex items-center gap-2 rounded-lg border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-accent"
-              >
-                <Terminal className="h-4 w-4" />
-                Quick Start
-              </a>
-            </div>
-          </div>
-
-          {/* Terminal */}
-          <div className="mx-auto mt-16 max-w-2xl">
-            <div className="overflow-hidden rounded-xl border border-border bg-card">
-              <div className="flex items-center gap-2 border-b border-border px-4 py-3">
-                <div className="flex gap-1.5">
-                  <div className="h-3 w-3 rounded-full bg-red-500/80" />
-                  <div className="h-3 w-3 rounded-full bg-yellow-500/80" />
-                  <div className="h-3 w-3 rounded-full bg-green-500/80" />
-                </div>
-                <span className="ml-2 text-xs text-muted-foreground">bash</span>
+        <div className="mx-auto max-w-6xl px-6 py-20 md:px-8 md:py-28">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
+            <div className="animate-in">
+              <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl lg:text-[3.25rem] lg:leading-[1.1]">
+                Programmable email infrastructure.
+              </h1>
+              <p className="mt-6 max-w-md text-pretty text-lg text-muted-foreground">
+                Open source, Cloudflare-native. Generate inboxes, receive
+                emails, and automate through REST APIs, SDKs, and MCP.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Link
+                  to="/dashboard"
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
+                >
+                  Open Dashboard
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <a
+                  href="https://github.com/andriansandi/inbix"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-accent active:scale-[0.98]"
+                >
+                  <GitBranch className="h-4 w-4" />
+                  View Source
+                </a>
               </div>
-              <div className="p-4 font-mono text-sm">
-                <div className="text-muted-foreground">$ <span className="text-foreground">git clone https://github.com/andriansandi/inbix.git</span></div>
-                <div className="text-muted-foreground">$ <span className="text-foreground">cd inbix && pnpm install</span></div>
-                <div className="text-muted-foreground">$ <span className="text-foreground">pnpm deploy</span></div>
-                <div className="mt-2 text-emerald-500">✓ Deployed to Cloudflare Workers</div>
-                <div className="text-primary">→ https://inbix.your-subdomain.workers.dev</div>
+            </div>
+
+            {/* Code example */}
+            <div className="animate-in">
+              <div className="overflow-hidden rounded-xl border border-border bg-card">
+                <div className="flex items-center gap-2 border-b border-border px-4 py-3">
+                  <div className="flex gap-1.5">
+                    <div className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
+                    <div className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
+                    <div className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
+                  </div>
+                  <span className="ml-2 font-mono text-xs text-muted-foreground">create-inbox.ts</span>
+                </div>
+                <pre className="overflow-x-auto p-4 font-mono text-sm leading-relaxed">
+                  <code>
+                    <span className="text-muted-foreground">{"import"} </span>
+                    <span className="text-foreground">{"{ InbixClient }"}</span>
+                    <span className="text-muted-foreground">{" from "}</span>
+                    <span className="text-primary">{'"@inbix/sdk"'}</span>
+                    <span className="text-muted-foreground">{";"}</span>
+                    {"\n\n"}
+                    <span className="text-muted-foreground">{"const"}</span>
+                    <span className="text-foreground">{" client"}</span>
+                    <span className="text-muted-foreground">{" = new "}</span>
+                    <span className="text-foreground">{"InbixClient"}</span>
+                    <span className="text-muted-foreground">{"({"}</span>
+                    {"\n  "}
+                    <span className="text-foreground">{"baseUrl"}</span>
+                    <span className="text-muted-foreground">{": "}</span>
+                    <span className="text-primary">{'"https://api.inbix.xyz"'}</span>
+                    <span className="text-muted-foreground">{","}</span>
+                    {"\n"}<span className="text-muted-foreground">{"});"}</span>
+                    {"\n\n"}
+                    <span className="text-muted-foreground">{"const"}</span>
+                    <span className="text-foreground">{" inbox"}</span>
+                    <span className="text-muted-foreground">{" = await "}</span>
+                    <span className="text-foreground">{"client"}</span>
+                    <span className="text-muted-foreground">{"."}</span>
+                    <span className="text-foreground">{"createInbox"}</span>
+                    <span className="text-muted-foreground">{"();"}</span>
+                    {"\n"}
+                    <span className="text-muted-foreground">{"console."}</span>
+                    <span className="text-foreground">{"log"}</span>
+                    <span className="text-muted-foreground">{"(inbox."}</span>
+                    <span className="text-foreground">{"emailAddress"}</span>
+                    <span className="text-muted-foreground">{");"}</span>
+                    {"\n\n"}
+                    <span className="text-muted-foreground">{"client."}</span>
+                    <span className="text-foreground">{"subscribeToInbox"}</span>
+                    <span className="text-muted-foreground">{"(inbox."}</span>
+                    <span className="text-foreground">{"id"}</span>
+                    <span className="text-muted-foreground">{", (msg) => {"}</span>
+                    {"\n  "}
+                    <span className="text-muted-foreground">{"console."}</span>
+                    <span className="text-foreground">{"log"}</span>
+                    <span className="text-muted-foreground">{'("New:", msg.'}</span>
+                    <span className="text-foreground">{"subject"}</span>
+                    <span className="text-muted-foreground">{");"}</span>
+                    {"\n"}
+                    <span className="text-muted-foreground">{"});"}</span>
+                  </code>
+                </pre>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features */}
+      {/* Pillars - asymmetric grid */}
       <section id="features" className="border-t border-border">
-        <div className="mx-auto max-w-6xl px-6 py-24">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-              Everything you need, nothing you don't
-            </h2>
-            <p className="mt-4 text-muted-foreground">
-              Built for developers, QA engineers, and automation pipelines.
-            </p>
-          </div>
+        <div className="mx-auto max-w-6xl px-6 py-24 md:px-8">
+          <h2 className="max-w-lg text-3xl font-bold tracking-tight md:text-4xl">
+            Built for developers, not for email.
+          </h2>
+          <p className="mt-4 max-w-md text-muted-foreground">
+            Everything is an API call. The dashboard is just one client.
+          </p>
 
-          <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-3">
             {[
-              { icon: Zap, title: "Instant Inbox", desc: "Generate a random disposable email address in one click. No signup required." },
-              { icon: Mail, title: "Real-time Messages", desc: "Watch emails arrive in real-time via Server-Sent Events. No refresh needed." },
-              { icon: Shield, title: "HTML Sanitized", desc: "All HTML emails are sanitized to prevent XSS. View safely in a sandboxed iframe." },
-              { icon: Layers, title: "Attachment Support", desc: "Receive and download attachments up to 10MB. Stored in Cloudflare R2." },
-              { icon: Lock, title: "Auto Expiration", desc: "Inboxes expire automatically. Set custom TTL from 1 minute to 7 days." },
-              { icon: Globe, title: "Multi-domain", desc: "Support multiple domains. Route emails from all your domains to one Worker." },
-              { icon: Database, title: "D1 Database", desc: "All metadata stored in Cloudflare D1. Fast, reliable, serverless SQLite." },
-              { icon: Cloud, title: "100% Cloudflare", desc: "No external dependencies. Everything runs on Cloudflare's edge network." },
-              { icon: Server, title: "REST API", desc: "Full REST API for automation, CI/CD pipelines, and integrations." },
+              { icon: Code2, title: "API-first", desc: "Full REST API for every operation. Create inboxes, read messages, download attachments, all programmatically." },
+              { icon: Radio, title: "Real-time SSE", desc: "Server-Sent Events push new messages to your client the moment they arrive. No polling required." },
+              { icon: Cloud, title: "Cloudflare-native", desc: "Runs entirely on Cloudflare Workers, D1, R2, and KV. No external services, no SMTP servers." },
             ].map((f) => (
-              <div
-                key={f.title}
-                className="group rounded-xl border border-border bg-card p-6 transition-colors hover:border-primary/50"
-              >
-                <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-secondary transition-colors group-hover:bg-primary/10">
+              <div key={f.title} className="bg-card p-6">
+                <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-secondary">
                   <f.icon className="h-5 w-5 text-primary" />
                 </div>
                 <h3 className="text-base font-semibold">{f.title}</h3>
-                <p className="mt-1.5 text-sm text-muted-foreground">{f.desc}</p>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Secondary features - hairline list */}
+          <div className="mt-12 grid grid-cols-1 gap-x-12 gap-y-0 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { icon: Shield, title: "HTML sanitized", desc: "All HTML emails sanitized against XSS. Rendered in sandboxed iframes." },
+              { icon: Boxes, title: "Attachment support", desc: "Receive and download attachments up to 10MB. Stored in Cloudflare R2." },
+              { icon: Zap, title: "Auto expiration", desc: "Inboxes expire automatically. Custom TTL from 1 minute to 7 days." },
+              { icon: KeyRound, title: "API keys", desc: "Generate API keys for automation, CI/CD pipelines, and integrations." },
+              { icon: Webhook, title: "Webhooks", desc: "Receive HTTP callbacks when messages arrive. Build event-driven workflows." },
+              { icon: Bot, title: "MCP Server", desc: "Use with Claude, Cursor, and any MCP-compatible AI agent." },
+            ].map((f) => (
+              <div key={f.title} className="flex items-start gap-3 border-b border-border py-4">
+                <div className="mt-0.5 shrink-0">
+                  <f.icon className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-medium">{f.title}</h4>
+                  <p className="mt-0.5 text-sm text-muted-foreground">{f.desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -150,246 +176,147 @@ export function HomePage() {
 
       {/* Architecture */}
       <section id="architecture" className="border-t border-border bg-card/50">
-        <div className="mx-auto max-w-6xl px-6 py-24">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Architecture</h2>
-            <p className="mt-4 text-muted-foreground">
-              A single Cloudflare Worker handles everything. Simple, fast, cost-effective.
-            </p>
+        <div className="mx-auto max-w-6xl px-6 py-24 md:px-8">
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+            One Worker. Everything included.
+          </h2>
+          <p className="mt-4 max-w-md text-muted-foreground">
+            A single Cloudflare Worker handles email routing, API, and static
+            assets. No microservices, no orchestration.
+          </p>
+
+          <div className="mt-16 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {[
+              { label: "Email Worker", sub: "Parses MIME, extracts content", icon: Terminal },
+              { label: "Hono API", sub: "REST API + SSE real-time", icon: Server },
+              { label: "D1 Database", sub: "Inbox and message metadata", icon: Database },
+              { label: "R2 Storage", sub: "Attachments and large content", icon: Boxes },
+              { label: "KV Cache", sub: "Rate limiting and caching", icon: Zap },
+              { label: "React Dashboard", sub: "Static SPA served by Worker", icon: Globe },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className="flex items-center gap-3 rounded-lg border border-border bg-background p-4"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary">
+                  <item.icon className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <div className="text-sm font-semibold">{item.label}</div>
+                  <div className="text-xs text-muted-foreground">{item.sub}</div>
+                </div>
+              </div>
+            ))}
           </div>
 
-          <div className="mt-16">
-            <div className="flex flex-col items-center gap-4">
-              {[
-                { label: "Incoming Email", sub: "Cloudflare Email Routing", icon: Mail },
-                { label: "Email Worker", sub: "Parses MIME, extracts content & attachments", icon: Terminal },
-                { label: "D1 Database", sub: "Stores inbox & message metadata", icon: Database },
-                { label: "R2 Storage", sub: "Stores attachments & large content", icon: Layers },
-                { label: "Hono API", sub: "REST API + SSE for real-time updates", icon: Server },
-                { label: "Dashboard", sub: "React SPA served as static assets", icon: Globe },
-              ].map((step, i) => (
-                <div key={step.label} className="flex flex-col items-center">
-                  <div className="flex items-center gap-3 rounded-xl border border-border bg-card px-6 py-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                      <step.icon className="h-5 w-5 text-primary" />
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
+            {["Cloudflare Workers", "Hono", "TypeScript", "D1", "R2", "KV", "Drizzle ORM", "Zod", "React", "Vite", "TailwindCSS"].map((tech) => (
+              <span
+                key={tech}
+                className="rounded-lg border border-border bg-background px-3 py-1.5 text-sm font-medium"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Quick start */}
+      <section id="deploy" className="border-t border-border">
+        <div className="mx-auto max-w-6xl px-6 py-24 md:px-8">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+                Deploy in 60 seconds.
+              </h2>
+              <p className="mt-4 text-muted-foreground">
+                No Docker. No VPS. No SMTP. Just Cloudflare.
+              </p>
+
+              <div className="mt-8 space-y-6">
+                {[
+                  { title: "Clone and install", cmd: "git clone https://github.com/andriansandi/inbix.git\ncd inbix && pnpm install" },
+                  { title: "Create Cloudflare resources", cmd: "npx wrangler d1 create inbix\nnpx wrangler r2 bucket create inbix-attachments\npnpm db:migrate" },
+                  { title: "Deploy", cmd: "pnpm deploy" },
+                ].map((step) => (
+                  <div key={step.title}>
+                    <div className="mb-2 flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-success" />
+                      <h3 className="text-sm font-semibold">{step.title}</h3>
                     </div>
-                    <div>
-                      <div className="text-sm font-semibold">{step.label}</div>
-                      <div className="text-xs text-muted-foreground">{step.sub}</div>
+                    <div className="overflow-hidden rounded-lg border border-border bg-card">
+                      <pre className="overflow-x-auto p-3 font-mono text-xs text-muted-foreground">
+                        <code>{step.cmd}</code>
+                      </pre>
                     </div>
                   </div>
-                  {i < 5 && <div className="h-6 w-px bg-border" />}
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Stack */}
-          <div className="mt-16">
-            <h3 className="mb-6 text-center text-sm font-medium text-muted-foreground">Built with</h3>
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              {["Cloudflare Workers", "Hono", "TypeScript", "D1", "R2", "KV", "Drizzle ORM", "Zod", "React", "Vite", "TailwindCSS", "shadcn/ui"].map((tech) => (
-                <span
-                  key={tech}
-                  className="rounded-lg border border-border bg-background px-3 py-1.5 text-sm font-medium"
+            <div className="flex flex-col gap-6">
+              <div className="rounded-xl border border-border bg-card p-6">
+                <Waypoints className="h-8 w-8 text-primary" />
+                <h3 className="mt-4 text-lg font-semibold">Email routing setup</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  In Cloudflare Dashboard, navigate to your domain, then
+                  Email, then Routing, then Routes. Add a catch-all rule
+                  that sends to your deployed Worker.
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-border bg-card p-6">
+                <Server className="h-8 w-8 text-primary" />
+                <h3 className="mt-4 text-lg font-semibold">Self-hostable</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  MIT licensed. No artificial limitations. Unlimited inboxes,
+                  unlimited API usage, unlimited custom domains. Deploy on
+                  your own Cloudflare account in minutes.
+                </p>
+                <Link
+                  to="/pricing"
+                  className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary"
                 >
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How it works */}
-      <section className="border-t border-border">
-        <div className="mx-auto max-w-6xl px-6 py-24">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight md:text-4xl">How it works</h2>
-            <p className="mt-4 text-muted-foreground">Three steps from zero to running.</p>
-          </div>
-
-          <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
-            {[
-              { num: "01", title: "Generate Inbox", desc: "Click a button to get a random email address. Or create one via the REST API." },
-              { num: "02", title: "Receive Emails", desc: "Send emails to the address. They appear instantly in the dashboard via SSE." },
-              { num: "03", title: "Read & Download", desc: "View HTML or plain text. Download attachments. Inbox auto-expires when done." },
-            ].map((step) => (
-              <div key={step.num} className="relative">
-                <div className="text-5xl font-bold text-primary/20">{step.num}</div>
-                <h3 className="mt-2 text-lg font-semibold">{step.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Deploy */}
-      <section id="deploy" className="border-t border-border bg-card/50">
-        <div className="mx-auto max-w-6xl px-6 py-24">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Deploy in 60 seconds</h2>
-            <p className="mt-4 text-muted-foreground">No Docker. No VPS. No SMTP. Just Cloudflare.</p>
-          </div>
-
-          <div className="mx-auto mt-16 max-w-2xl space-y-8">
-            <div>
-              <div className="mb-3 flex items-center gap-2">
-                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                <h3 className="text-base font-semibold">1. Prerequisites</h3>
-              </div>
-              <ul className="ml-7 space-y-1 text-sm text-muted-foreground">
-                <li>• A Cloudflare account (free tier works)</li>
-                <li>• Node.js 20+ and pnpm installed</li>
-                <li>• A domain configured in Cloudflare</li>
-              </ul>
-            </div>
-
-            <div>
-              <div className="mb-3 flex items-center gap-2">
-                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                <h3 className="text-base font-semibold">2. Clone & Install</h3>
-              </div>
-              <div className="ml-7 overflow-hidden rounded-lg border border-border bg-background">
-                <div className="p-3 font-mono text-sm">
-                  <div className="text-muted-foreground">$ git clone https://github.com/andriansandi/inbix.git</div>
-                  <div className="text-muted-foreground">$ cd inbix</div>
-                  <div className="text-muted-foreground">$ pnpm install</div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div className="mb-3 flex items-center gap-2">
-                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                <h3 className="text-base font-semibold">3. Configure Cloudflare Resources</h3>
-              </div>
-              <div className="ml-7 overflow-hidden rounded-lg border border-border bg-background">
-                <div className="p-3 font-mono text-sm">
-                  <div className="text-muted-foreground"># Create D1 database</div>
-                  <div className="text-muted-foreground">$ npx wrangler d1 create inbix</div>
-                  <div className="text-muted-foreground"># Create R2 bucket</div>
-                  <div className="text-muted-foreground">$ npx wrangler r2 bucket create inbix-attachments</div>
-                  <div className="text-muted-foreground"># Create KV namespaces</div>
-                  <div className="text-muted-foreground">$ npx wrangler kv namespace create CACHE</div>
-                  <div className="text-muted-foreground">$ npx wrangler kv namespace create RATE_LIMIT_KV</div>
-                  <div className="text-muted-foreground"># Run migrations</div>
-                  <div className="text-muted-foreground">$ pnpm db:migrate</div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div className="mb-3 flex items-center gap-2">
-                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                <h3 className="text-base font-semibold">4. Deploy</h3>
-              </div>
-              <div className="ml-7 overflow-hidden rounded-lg border border-border bg-background">
-                <div className="p-3 font-mono text-sm">
-                  <div className="text-muted-foreground">$ pnpm deploy</div>
-                  <div className="mt-1 text-emerald-500">✓ Deployed inbix to Cloudflare Workers</div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div className="mb-3 flex items-center gap-2">
-                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                <h3 className="text-base font-semibold">5. Set up Email Routing</h3>
-              </div>
-              <p className="ml-7 text-sm text-muted-foreground">
-                In Cloudflare Dashboard → Email → Routing → Routes,
-                add a catch-all rule that sends to your deployed Worker.
-                Done!
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Documentation */}
-      <section className="border-t border-border">
-        <div className="mx-auto max-w-6xl px-6 py-24">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {[
-              { title: "Getting Started", desc: "Quick setup guide", link: "#" },
-              { title: "API Reference", desc: "REST API documentation", link: "#" },
-              { title: "Architecture", desc: "How Inbix works internally", link: "#" },
-              { title: "Self-hosting", desc: "Deploy on your own domain", link: "#" },
-            ].map((doc) => (
-              <a
-                key={doc.title}
-                href={doc.link}
-                className="group rounded-xl border border-border bg-card p-6 transition-colors hover:border-primary/50"
-              >
-                <h3 className="text-base font-semibold group-hover:text-primary">{doc.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{doc.desc}</p>
-                <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-primary">
-                  Read more
+                  Compare plans
                   <ArrowRight className="h-3 w-3" />
-                </div>
-              </a>
-            ))}
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* GitHub CTA */}
+      {/* CTA */}
       <section className="border-t border-border bg-card/50">
-        <div className="mx-auto max-w-6xl px-6 py-24">
+        <div className="mx-auto max-w-6xl px-6 py-24 md:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-background">
-              <Github className="h-8 w-8" />
-            </div>
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-              Star us on GitHub
+              Start building with Inbix.
             </h2>
             <p className="mt-4 text-muted-foreground">
-              Inbix is open source and MIT licensed. Star the repo, file issues,
-              contribute, and help us make disposable email better.
+              Open source. Free to self-host. Cloud plans start at $2.99/month.
             </p>
-            <div className="mt-8 flex items-center justify-center gap-3">
-              <a
-                href="https://github.com/andriansandi/inbix"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg bg-foreground px-6 py-3 text-sm font-medium text-background transition-opacity hover:opacity-90"
-              >
-                <Github className="h-4 w-4" />
-                Star on GitHub
-              </a>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <Link
                 to="/dashboard"
-                className="inline-flex items-center gap-2 rounded-lg border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-accent"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
               >
-                Try Dashboard
+                Open Dashboard
                 <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/pricing"
+                className="inline-flex items-center gap-2 rounded-lg border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-accent active:scale-[0.98]"
+              >
+                View Pricing
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-border">
-        <div className="mx-auto max-w-6xl px-6 py-12">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
-                <Mail className="h-4 w-4 text-white" />
-              </div>
-              <span className="text-sm font-semibold">Inbix</span>
-              <span className="text-sm text-muted-foreground">· Open Source · MIT License</span>
-            </div>
-            <div className="flex items-center gap-6 text-sm text-muted-foreground">
-              <a href="https://github.com/andriansandi/inbix" className="hover:text-foreground">GitHub</a>
-              <a href="#" className="hover:text-foreground">Docs</a>
-              <a href="https://inbix.xyz" className="hover:text-foreground">inbix.xyz</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
