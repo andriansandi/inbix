@@ -8,7 +8,17 @@ const app = createApp();
 export default {
   async fetch(request: Request, env: HonoEnv["Bindings"], ctx: ExecutionContext): Promise<Response> {
     ctx.waitUntil(cleanupExpiredData(env).catch(() => {}));
-    return app.fetch(request, env, ctx);
+    const response = await app.fetch(request, env, ctx);
+    const url = new URL(request.url);
+    if (
+      response.status === 404 &&
+      request.method === "GET" &&
+      !url.pathname.startsWith("/api/") &&
+      (request.headers.get("accept") ?? "").includes("text/html")
+    ) {
+      return env.ASSETS.fetch(new Request(new URL("/index.html", url)));
+    }
+    return response;
   },
 
   async email(message: ForwardableEmailMessage, env: EmailEnv["Bindings"], ctx: ExecutionContext): Promise<void> {
