@@ -157,3 +157,228 @@ This document outlines the planned development milestones for Inbix.
 5. Create GitHub release with notes
 6. Deploy to production
 7. Tag the release commit
+
+---
+
+## Product Vision
+
+Inbix is an Open Source Cloudflare-native Email API Platform.
+
+The Dashboard is only one client. The REST API is the primary product.
+Everything must be accessible through public APIs. SDKs, Dashboard and MCP
+Server all consume the same APIs.
+
+---
+
+## Monetization
+
+### Open Source (Self-hosted)
+
+- MIT License
+- Unlimited deployments
+- Unlimited active inboxes
+- Unlimited API usage (subject to Cloudflare account limits)
+- Unlimited custom domains
+- Full REST API
+- SDK support
+- MCP Server support
+- Community support
+- Public documentation
+
+No artificial limitations.
+
+### Cloud Free
+
+Anonymous:
+
+- 1 Active Inbox
+- 30-minute retention
+- Shared public domains
+- Limited API
+
+Authenticated (Clerk):
+
+- 5 Active Inboxes
+- 30-minute retention
+- Shared public domains
+- Web Dashboard
+- Basic REST API
+- Limited API requests
+
+Purpose: Encourage account creation before upgrading.
+
+### Cloud Pro
+
+Pricing: $2.99/month or $24/year
+
+Features:
+
+- Unlimited Active Inboxes
+- Full REST API
+- 10,000 API requests/month
+- 7-day retention
+- Custom inbox names
+- Webhooks
+- Higher rate limits
+- Priority processing
+- Ad-free
+
+### Cloud Team
+
+Pricing: $9.99/month
+
+Features:
+
+- Team Workspaces
+- Shared Inboxes
+- Shared API Keys
+- Analytics
+- Audit Logs
+- Multiple Domains
+- Higher API Limits
+
+### Enterprise (Future)
+
+- Dedicated infrastructure
+- SLA
+- SSO
+- Private deployment
+- Dedicated domains
+- White-label
+
+---
+
+## Authentication
+
+Official provider: Clerk
+
+Supported methods:
+
+- Email
+- Password
+- Magic Link
+- Google
+- GitHub
+- Passkeys
+
+Organizations: Use Clerk Organizations for Team plans.
+
+RBAC roles:
+
+- anonymous
+- free
+- pro
+- team
+- enterprise
+- admin
+
+Billing: Stripe
+
+User entitlements are synchronized into Clerk metadata. The API reads
+permissions directly from Clerk. No separate permission database.
+
+---
+
+## API First
+
+Priorities:
+
+1. Dashboard
+2. REST API
+3. SDKs
+4. MCP Server
+5. Cloud Hosting
+
+---
+
+## SDK Roadmap
+
+Official SDKs:
+
+- JavaScript
+- TypeScript
+- Python
+- Go
+- PHP
+- Java
+- C#
+
+---
+
+## MCP Roadmap
+
+Package: `@inbix/mcp-server`
+
+Supported transports:
+
+- STDIO
+- HTTP
+- SSE (future)
+
+Supported clients:
+
+- Claude Desktop
+- Claude Code
+- Cursor
+- Windsurf
+- VS Code
+- OpenAI-compatible MCP Clients
+
+Initial tools:
+
+- `create_inbox`
+- `read_inbox`
+- `read_message`
+- `wait_for_email`
+- `wait_for_otp`
+- `extract_verification_link`
+- `download_attachment`
+- `search_messages`
+- `delete_inbox`
+
+Future MCP capabilities:
+
+- Multi Inbox
+- AI Spam Detection
+- AI Phishing Detection
+- Invoice Extraction
+- Structured Email Extraction
+- Email Summarization
+- OTP Extraction
+- Verification Link Extraction
+
+---
+
+## Repository Structure (Extended)
+
+```
+packages/
+  mcp-server/     # @inbix/mcp-server
+  sdk-js/         # JavaScript SDK
+  sdk-python/     # Python SDK
+  sdk-go/         # Go SDK
+  sdk-php/        # PHP SDK
+  shared/         # Shared types, constants, schemas
+```
+
+---
+
+## Documentation Roadmap
+
+Future documentation:
+
+- API Reference
+- SDK Guides
+- MCP Guide
+- Clerk Authentication
+- Billing
+- Organizations
+- Self-hosting
+- Cloud Deployment
+- Playwright
+- Cypress
+- Selenium
+- GitHub Actions
+- Claude Code
+- Cursor
+- AI Agents

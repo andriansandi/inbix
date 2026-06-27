@@ -4,8 +4,24 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Inbix — Disposable Email</title>
-    <meta name="description" content="Open Source Disposable Email Platform powered by Cloudflare Workers" />
+    <title>Inbix - Email API Platform</title>
+    <meta name="description" content="Open Source Cloudflare-native Email API Platform. Generate inboxes, receive emails, and build automation through REST APIs, SDKs, and MCP." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <script>
+      (function () {
+        var theme = localStorage.getItem("inbix:theme");
+        if (!theme) {
+          theme = window.matchMedia("(prefers-color-scheme: light)").matches
+            ? "light"
+            : "dark";
+        }
+        if (theme === "light") {
+          document.documentElement.classList.remove("dark");
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

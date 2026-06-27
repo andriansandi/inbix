@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Clock } from "lucide-react";
 import { formatExpiry } from "../lib/utils";
+import { cn } from "../lib/utils";
 
 interface ExpiryTimerProps {
   expiresAt: number;
@@ -19,17 +20,18 @@ export function ExpiryTimer({ expiresAt }: ExpiryTimerProps) {
   const isUrgent = remaining > 0 && remaining < 5 * 60 * 1000;
 
   return (
-    <div
-      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs font-medium",
         isExpired
-          ? "bg-red-500/10 text-red-500"
+          ? "bg-destructive/10 text-destructive"
           : isUrgent
             ? "bg-amber-500/10 text-amber-500"
             : "bg-muted text-muted-foreground"
-      }`}
+      )}
     >
       <Clock className="h-3 w-3" />
       {isExpired ? "Expired" : formatExpiry(expiresAt)}
-    </div>
+    </span>
   );
 }
