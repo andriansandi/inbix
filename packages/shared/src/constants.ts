@@ -25,6 +25,9 @@ export const RATE_LIMIT = {
   CREATE_INBOX_MAX: 10,
 };
 
+export const ANONYMOUS_INBOX_LIMIT = 1;
+export const FREE_TIER_INBOX_LIMIT = 5;
+
 export const SSE_HEARTBEAT_MS = 30_000;
 export const SSE_RETRY_MS = 5_000;
 
