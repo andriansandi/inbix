@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import type { Inbox } from "@inbix/shared";
 import { api } from "../lib/api";
+import { getStoredInboxes, addStoredInbox, removeStoredInbox } from "../lib/inboxStorage";
 import { useInbox } from "../hooks/useInbox";
 import { CopyButton } from "../components/CopyButton";
 import { ExpiryTimer } from "../components/ExpiryTimer";
@@ -31,10 +32,7 @@ export function DashboardPage() {
   const fetchInboxList = useCallback(async () => {
     setListLoading(true);
     try {
-      const data = await api.listInboxes();
-      setInboxList(data.data);
-    } catch {
-      // ignore
+      setInboxList(getStoredInboxes());
     } finally {
       setListLoading(false);
     }
@@ -44,10 +42,19 @@ export function DashboardPage() {
     fetchInboxList();
   }, [fetchInboxList]);
 
+  useEffect(() => {
+    if (inbox) {
+      setInboxList((prev) => {
+        if (prev.some((i) => i.id === inbox.id)) return prev;
+        return addStoredInbox(inbox);
+      });
+    }
+  }, [inbox]);
+
   const handleCreateInbox = async () => {
     try {
       const newInbox = await api.createInbox();
-      setInboxList((prev) => [newInbox, ...prev]);
+      setInboxList(addStoredInbox(newInbox));
       navigate(`/dashboard/${newInbox.id}`);
       setMobileView("messages");
     } catch (err) {
@@ -60,7 +67,7 @@ export function DashboardPage() {
     if (!confirm("Delete this inbox and all its messages?")) return;
     try {
       await api.deleteInbox(id);
-      setInboxList((prev) => prev.filter((i) => i.id !== id));
+      setInboxList(removeStoredInbox(id));
       if (id === currentInboxId) {
         navigate("/dashboard");
         setMobileView("inboxes");
