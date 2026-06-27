@@ -4,12 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev",
-    "build": "wrangler deploy --dry-run",
-    "deploy": "wrangler deploy",
+    "dev": "wrangler dev --config ../../wrangler.jsonc",
+    "build": "wrangler deploy --dry-run --config ../../wrangler.jsonc",
+    "deploy": "wrangler deploy --config ../../wrangler.jsonc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
-    "tail": "wrangler tail"
+    "tail": "wrangler tail --config ../../wrangler.jsonc"
   },
   "dependencies": {
     "@inbix/database": "workspace:*",

@@ -18,9 +18,9 @@
     "db:generate": "pnpm --filter @inbix/database drizzle-kit generate",
     "db:migrate": "pnpm --filter @inbix/database tsx src/migrate.ts",
     "db:studio": "pnpm --filter @inbix/database drizzle-kit studio",
-    "deploy": "turbo build && pnpm --filter @inbix/web wrangler deploy",
+    "deploy": "pnpm --filter @inbix/dashboard build && wrangler deploy",
     "deploy:dashboard": "pnpm --filter @inbix/dashboard build",
-    "deploy:worker": "pnpm --filter @inbix/web wrangler deploy",
+    "deploy:worker": "wrangler deploy",
     "clean": "turbo clean && rm -rf node_modules"
   },
   "devDependencies": {
