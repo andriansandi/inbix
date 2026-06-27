@@ -5,7 +5,7 @@ This guide walks through deploying Inbix to Cloudflare from scratch.
 ## Prerequisites
 
 1. **Cloudflare Account** — [Sign up](https://dash.cloudflare.com/sign-up) (free tier is sufficient)
-2. **Node.js 20+** — [Download](https://nodejs.org)
+2. **Node.js 22+** — [Download](https://nodejs.org) (required by pnpm 11's `node:sqlite`)
 3. **pnpm** — `npm install -g pnpm`
 4. **Domain in Cloudflare** — Your domain must use Cloudflare DNS for Email Routing
 
@@ -42,13 +42,16 @@ database_name = "inbix"
 database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 ```
 
-Copy the `database_id` into `apps/web/wrangler.toml`:
+Copy the `database_id` into `wrangler.jsonc` (at the repo root):
 
-```toml
-[[d1_databases]]
-binding = "DB"
-database_name = "inbix"
-database_id = "your-database-id-here"
+```jsonc
+"d1_databases": [
+  {
+    "binding": "DB",
+    "database_name": "inbix",
+    "database_id": "your-database-id-here"
+  }
+]
 ```
 
 ### 4. Create R2 Bucket
@@ -64,16 +67,13 @@ npx wrangler kv namespace create CACHE
 npx wrangler kv namespace create RATE_LIMIT_KV
 ```
 
-Copy both namespace IDs into `apps/web/wrangler.toml`:
+Copy both namespace IDs into `wrangler.jsonc` (at the repo root):
 
-```toml
-[[kv_namespaces]]
-binding = "CACHE"
-id = "your-cache-kv-id"
-
-[[kv_namespaces]]
-binding = "RATE_LIMIT_KV"
-id = "your-rate-limit-kv-id"
+```jsonc
+"kv_namespaces": [
+  { "binding": "CACHE", "id": "your-cache-kv-id" },
+  { "binding": "RATE_LIMIT_KV", "id": "your-rate-limit-kv-id" }
+]
 ```
 
 ### 6. Run Database Migrations
@@ -86,16 +86,34 @@ This creates all tables (inboxes, messages, attachments, api_keys, domains, user
 
 ### 7. Update Environment Variables
 
-Edit `apps/web/wrangler.toml` `[vars]` section:
+Edit `wrangler.jsonc` (at the repo root) `vars` section:
 
-```toml
-[vars]
-ENVIRONMENT = "production"
-APP_DOMAIN = "yourdomain.com"
-CORS_ORIGIN = "https://yourdomain.com"
+```jsonc
+"vars": {
+  "ENVIRONMENT": "production",
+  "APP_DOMAIN": "yourdomain.com",
+  "CORS_ORIGIN": "https://yourdomain.com"
+}
 ```
 
-### 8. Build & Deploy
+### 8. Deploy
+
+Inbix uses **Cloudflare Workers Builds** for production deploys. Once your repo is
+connected (Workers & Pages → `inbix` → Settings → Builds), every push to `main`
+automatically builds and deploys.
+
+Ensure the Workers Builds **build command** includes the dashboard build:
+
+```
+pnpm install --frozen-lockfile && pnpm --filter @inbix/dashboard build
+```
+
+The deploy command is the default `wrangler deploy`, which picks up `wrangler.jsonc`
+at the repo root and bundles the dashboard assets from `apps/web/public/`.
+
+#### Manual deploy (alternative)
+
+To deploy from your machine instead:
 
 ```bash
 pnpm deploy
@@ -113,6 +131,11 @@ Deployed inbix to https://inbix.your-subdomain.workers.dev
 ### 9. Set Up Email Routing
 
 This is the most important step — it enables email reception.
+
+> **Prerequisite:** Your domain must be added as a **zone** in Cloudflare (DNS tab)
+> and fully active. If your domain is not yet on Cloudflare, add it first
+> (Dashboard → Add a Site → enter domain → change nameservers at your registrar)
+> and wait for it to become `active` before continuing.
 
 1. Go to [Cloudflare Dashboard](https://dash.cloudflare.com)
 2. Select your domain
@@ -136,15 +159,12 @@ To serve Inbix on your own domain instead of `*.workers.dev`:
 
 Cloudflare will automatically create the DNS record and provision an SSL certificate.
 
-Update `CORS_ORIGIN` in `wrangler.toml` to match:
-```toml
-CORS_ORIGIN = "https://mail.yourdomain.com"
+Update `CORS_ORIGIN` in `wrangler.jsonc` to match:
+```jsonc
+"CORS_ORIGIN": "https://mail.yourdomain.com"
 ```
 
-Redeploy:
-```bash
-pnpm deploy
-```
+Redeploy (push to `main` for Workers Builds, or `pnpm deploy` manually).
 
 ### 11. Verify
 
@@ -188,10 +208,10 @@ Cloudflare's local dev (`wrangler dev`) does not support the `email()` handler. 
 ## Troubleshooting
 
 ### "Database not found"
-Ensure the `database_id` in `wrangler.toml` matches the output from `wrangler d1 create`.
+Ensure the `database_id` in `wrangler.jsonc` matches the output from `wrangler d1 create`.
 
 ### "KV namespace not found"
-Ensure the KV namespace IDs in `wrangler.toml` match the outputs from `wrangler kv namespace create`.
+Ensure the KV namespace IDs in `wrangler.jsonc` match the outputs from `wrangler kv namespace create`.
 
 ### Emails not arriving
 1. Verify Email Routing is enabled in Cloudflare Dashboard
@@ -207,7 +227,7 @@ pnpm --filter @inbix/web wrangler deploy
 ```
 
 ### CORS errors
-Ensure `CORS_ORIGIN` in `wrangler.toml` includes your dashboard's origin.
+Ensure `CORS_ORIGIN` in `wrangler.jsonc` includes your dashboard's origin.
 
 ## Rollback
 
