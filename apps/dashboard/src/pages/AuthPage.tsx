@@ -22,14 +22,14 @@ export function AuthPage() {
           <div className="mt-6 space-y-3">
             <button
               className="flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent active:scale-[0.98]"
-              onClick={() => alert("Clerk authentication is planned. Use the dashboard without an account for now.")}
+              onClick={() => alert("Authentication is planned. Use the dashboard without an account for now.")}
             >
               <Github className="h-4 w-4" />
               Continue with GitHub
             </button>
             <button
               className="flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent active:scale-[0.98]"
-              onClick={() => alert("Clerk authentication is planned. Use the dashboard without an account for now.")}
+              onClick={() => alert("Authentication is planned. Use the dashboard without an account for now.")}
             >
               <svg className="h-4 w-4" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -50,7 +50,7 @@ export function AuthPage() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              alert("Clerk authentication is planned. Use the dashboard without an account for now.");
+              alert("Authentication is planned. Use the dashboard without an account for now.");
             }}
             className="space-y-4"
           >
@@ -74,8 +74,8 @@ export function AuthPage() {
           </form>
 
           <p className="mt-6 text-center text-xs text-muted-foreground">
-            Authentication is powered by Clerk. Passkeys, magic links,
-            and social login will be available.
+            Authentication supports passkeys, magic links,
+            and social login.
           </p>
         </div>
 

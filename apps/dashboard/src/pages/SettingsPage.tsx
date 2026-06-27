@@ -96,7 +96,7 @@ export function SettingsPage() {
 
                 <button
                   className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
-                  onClick={() => alert("API key generation requires authentication. Clerk integration is planned.")}
+                  onClick={() => alert("API key generation requires authentication. Sign in to continue.")}
                 >
                   <KeyRound className="h-4 w-4" />
                   Generate New Key
@@ -114,7 +114,7 @@ export function SettingsPage() {
                 </div>
                 <div className="rounded-xl border border-border bg-card p-6">
                   <p className="text-sm text-muted-foreground">
-                    Profile management requires Clerk authentication.
+                    Profile management requires authentication.
                     Sign in to manage your profile, email, and password.
                   </p>
                 </div>
