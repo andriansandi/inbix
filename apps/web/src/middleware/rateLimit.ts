@@ -1,5 +1,5 @@
 import { createMiddleware } from "hono/factory";
-import type { HonoEnv } from "@inbix/shared";
+import type { HonoEnv } from "../lib/env";
 import { RATE_LIMIT, json } from "@inbix/shared";
 
 export const rateLimit = createMiddleware<HonoEnv>(async (c, next) => {

@@ -1,5 +1,5 @@
 import { createMiddleware } from "hono/factory";
-import type { HonoEnv } from "@inbix/shared";
+import type { HonoEnv } from "../lib/env";
 
 export const securityHeaders = createMiddleware<HonoEnv>(async (c, next) => {
   await next();

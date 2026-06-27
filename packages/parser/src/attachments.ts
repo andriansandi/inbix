@@ -47,7 +47,7 @@ export function validateAttachment(att: ParsedAttachment, index: number): Valida
 
 export function validateAttachments(attachments: ParsedAttachment[]): ValidatedAttachment[] {
   if (attachments.length > MAX_ATTACHMENTS_PER_MESSAGE) {
-    return attachments.slice(0, MAX_ATTACHMENTS_PER_MESSAGE).map((att, i) => ({
+    return attachments.slice(0, MAX_ATTACHMENTS_PER_MESSAGE).map((att) => ({
       ...att,
       r2Key: "",
       error: "Too many attachments",

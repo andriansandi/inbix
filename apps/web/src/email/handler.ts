@@ -1,4 +1,4 @@
-import type { EmailEnv } from "@inbix/shared";
+import type { EmailEnv } from "../lib/env";
 import { getDomainFromEmail, generateId } from "@inbix/shared";
 import { parseEmail, validateAttachments } from "@inbix/parser";
 import {

@@ -1,0 +1,49 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "inbix",
+  "main": "apps/web/src/index.ts",
+  "compatibility_date": "2024-12-01",
+  "compatibility_flags": ["nodejs_compat"],
+
+  "assets": {
+    "directory": "apps/web/public",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "inbix",
+      "database_id": "3be8814b-4ef7-424f-83b7-be50e3049569"
+    }
+  ],
+
+  "r2_buckets": [
+    {
+      "binding": "R2_BUCKET",
+      "bucket_name": "inbix-attachments"
+    }
+  ],
+
+  "kv_namespaces": [
+    {
+      "binding": "CACHE",
+      "id": "a1d892bd4326402f86f08ec60ccf6853"
+    },
+    {
+      "binding": "RATE_LIMIT_KV",
+      "id": "756a951c8de9427b8d96238506a4ccdf"
+    }
+  ],
+
+  "vars": {
+    "ENVIRONMENT": "production",
+    "APP_DOMAIN": "inbix.xyz",
+    "CORS_ORIGIN": "https://inbix.xyz"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}

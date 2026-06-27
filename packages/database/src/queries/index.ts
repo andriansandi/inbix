@@ -1,4 +1,4 @@
-import { eq, desc, lt, and, sql, count } from "drizzle-orm";
+import { eq, desc, lt, and, count } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import * as schema from "../schema";
 import { generateInboxId, generateMessageId } from "@inbix/shared";

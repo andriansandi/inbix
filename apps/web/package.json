@@ -4,19 +4,19 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev",
-    "build": "wrangler deploy --dry-run",
-    "deploy": "wrangler deploy",
+    "dev": "wrangler dev --config ../../wrangler.jsonc",
+    "build": "wrangler deploy --dry-run --config ../../wrangler.jsonc",
+    "deploy": "wrangler deploy --config ../../wrangler.jsonc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
-    "tail": "wrangler tail"
+    "tail": "wrangler tail --config ../../wrangler.jsonc"
   },
   "dependencies": {
     "@inbix/database": "workspace:*",
     "@inbix/parser": "workspace:*",
     "@inbix/shared": "workspace:*",
     "hono": "^4.6.0",
-    "drizzle-orm": "^0.38.0"
+    "drizzle-orm": "^0.45.2"
   },
   "devDependencies": {
     "typescript": "^5.8.0",

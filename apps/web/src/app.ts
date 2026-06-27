@@ -5,7 +5,7 @@ import { requestId } from "./middleware/requestId";
 import { errorHandler, notFoundHandler } from "./middleware/error";
 import { rateLimit } from "./middleware/rateLimit";
 import { securityHeaders } from "./middleware/securityHeaders";
-import type { HonoEnv } from "@inbix/shared";
+import type { HonoEnv } from "./lib/env";
 import { inboxRoutes } from "./routes/inboxes";
 import { messageRoutes } from "./routes/messages";
 import { healthRoutes } from "./routes/health";
@@ -15,13 +15,13 @@ export function createApp() {
   const app = new Hono<HonoEnv>();
 
   app.use("*", logger());
-  app.use("*", requestId());
-  app.use("*", securityHeaders());
+  app.use("*", requestId);
+  app.use("*", securityHeaders);
   app.use(
     "*",
     cors({
       origin: (origin, c) => {
-        const allowed = c.env.CORS_ORIGIN?.split(",").map((s) => s.trim()) ?? [];
+        const allowed = (c.env.CORS_ORIGIN ?? "").split(",").map((s: string) => s.trim());
         if (origin && (allowed.includes(origin) || allowed.includes("*"))) {
           return origin;
         }
@@ -34,7 +34,7 @@ export function createApp() {
     })
   );
 
-  app.use("/api/*", rateLimit());
+  app.use("/api/*", rateLimit);
 
   app.route("/api", healthRoutes);
   app.route("/api/inboxes", inboxRoutes);

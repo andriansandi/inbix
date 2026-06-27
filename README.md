@@ -511,7 +511,13 @@ Semua perubahan — baik feature maupun fix — **wajib** melalui Pull Request. 
 
 7. **Merge** — setelah approved, merge PR via GitHub UI (Squash and merge recommended).
 
-**Aturan branch protection sudah dikonfigurasi.** Lihat [CONTRIBUTING.md](CONTRIBUTING.md) untuk detail lengkap.
+**Aturan branch protection sudah dikonfigurasi dengan `enforce_admins: true`** —
+berlaku untuk **semua orang, termasuk repo owner**. Tidak ada yang bisa push
+langsung ke `main`. Setiap perubahan wajib lewat Pull Request, lalu di-merge
+manual via GitHub UI. Untuk solo developer, reviewer tidak diwajibkan (0 required
+reviews) — kamu bisa create PR, review sendiri, dan merge.
+
+Lihat [CONTRIBUTING.md](CONTRIBUTING.md) untuk detail lengkap.
 
 ## Security
 

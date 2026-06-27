@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import type { HonoEnv } from "@inbix/shared";
+import type { HonoEnv } from "../lib/env";
 import {
   json,
   errorResponse,
@@ -7,13 +7,11 @@ import {
   paginationSchema,
   DEFAULT_INBOX_TTL_SECONDS,
   generateId,
-  getDomainFromEmail,
 } from "@inbix/shared";
 import {
   createDatabase,
   createInbox,
   getInbox,
-  getInboxByEmail,
   listInboxes,
   deleteInbox,
   getDefaultDomain,
