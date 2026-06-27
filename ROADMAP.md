@@ -45,6 +45,46 @@ This document outlines the planned development milestones for Inbix.
 
 ---
 
+## Bug Fixes & UX Improvements (Next)
+
+**Goal**: Correct anonymous-inbox behavior, gate settings, finalize branding,
+and add section-transition motion.
+
+### Bug: Anonymous Single-Inbox Limit
+
+Anonymous users must be limited to **one active inbox** at a time.
+
+- [ ] Enforce single active inbox for anonymous sessions (backend + dashboard)
+- [ ] When an anonymous user attempts to create a new inbox while one already
+      exists, block creation
+- [ ] Offer two paths from the blocked state:
+  - **Delete** the current inbox, then create a new one, OR
+  - **Log in / Register** via a popup modal to unlock multiple inboxes
+- [ ] The login/register popup must be dismissible and clearly explain the
+      benefit of authenticating (more inboxes, longer retention)
+
+### Settings Restricted to Authenticated Users
+
+- [ ] The Settings page is only available to authenticated users
+- [ ] Anonymous users navigating to `/settings` are redirected to a
+      login/register prompt
+- [ ] Settings actions (API keys, profile, billing) require a valid session
+
+### Footer Copyright
+
+- [ ] Footer copyright text reads: **"a product by KODR"**
+- [ ] Replace any existing copyright placeholder across the dashboard footer
+
+### Framer Motion Section Transitions
+
+- [ ] Add Framer Motion (`motion`) as a dashboard dependency
+- [ ] Navigation to any section via hashtag/anchor (`#section`) triggers an
+      animated transition into that section
+- [ ] Each section entry uses a consistent, accessible motion variant
+      (fade + slide), gated behind `prefers-reduced-motion`
+
+---
+
 ## v0.2 — API & Automation
 
 **Goal**: Production-ready API for automation and CI/CD.
