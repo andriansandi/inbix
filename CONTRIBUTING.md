@@ -111,12 +111,14 @@ chore: bump dependencies
 7. Request review — PR must be **manually approved** via GitHub UI before merging
 8. Merge via **Squash and merge** (recommended)
 
-**Branch protection rules** on `main`:
+**Branch protection rules** on `main` (dengan `enforce_admins: true`):
+- **Berlaku untuk semua orang, termasuk repo owner** — tidak ada push langsung ke `main`
 - Require pull request before merging
-- Require approval (at least 1 reviewer)
-- Require status checks to pass (CI)
+- Require approval (at least 1 reviewer) — manual approve via GitHub UI
+- Require status checks to pass (CI: Type Check, Build, Security Audit)
 - Require conversation resolution
-- No force push
+- No force push, no branch deletion
+- Require linear history
 
 ### PR Checklist
 

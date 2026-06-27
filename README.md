@@ -511,7 +511,12 @@ Semua perubahan — baik feature maupun fix — **wajib** melalui Pull Request. 
 
 7. **Merge** — setelah approved, merge PR via GitHub UI (Squash and merge recommended).
 
-**Aturan branch protection sudah dikonfigurasi.** Lihat [CONTRIBUTING.md](CONTRIBUTING.md) untuk detail lengkap.
+**Aturan branch protection sudah dikonfigurasi dengan `enforce_admins: true`** —
+berlaku untuk **semua orang, termasuk repo owner**. Tidak ada yang bisa push
+langsung ke `main`. Setiap PR harus di-approve manual via GitHub UI sebelum
+bisa di-merge.
+
+Lihat [CONTRIBUTING.md](CONTRIBUTING.md) untuk detail lengkap.
 
 ## Security
 
