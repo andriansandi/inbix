@@ -466,6 +466,53 @@ Inbix is Cloudflare-native by design. It uses Cloudflare-specific APIs (D1, R2, 
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
 
+### Development Workflow (PR-Based)
+
+Semua perubahan — baik feature maupun fix — **wajib** melalui Pull Request. Tidak ada push langsung ke `main`.
+
+**Alur:**
+
+1. **Buat branch** dari `main` dengan prefix yang sesuai:
+   ```bash
+   git checkout main
+   git pull origin main
+   git checkout -b feat/nama-fitur      # untuk feature baru
+   git checkout -b fix/nama-bug         # untuk bug fix
+   git checkout -b docs/nama-dokumentasi # untuk dokumentasi
+   git checkout -b refactor/nama-refactor # untuk refactoring
+   ```
+
+2. **Buat perubahan** dan pastikan lolos check:
+   ```bash
+   pnpm typecheck   # harus pass
+   pnpm build       # harus pass
+   ```
+
+3. **Commit** dengan [Conventional Commits](https://www.conventionalcommits.org/):
+   ```bash
+   git commit -m "feat: tambah custom username support"
+   git commit -m "fix: resolve SSE connection dropping"
+   git commit -m "docs: update deployment guide"
+   ```
+
+4. **Push branch** dan buat PR:
+   ```bash
+   git push origin feat/nama-fitur
+   gh pr create --title "feat: nama fitur" --body "deskripsi perubahan"
+   ```
+
+5. **Tunggu CI pass** — GitHub Actions otomatis menjalankan typecheck, build, dan security audit pada setiap PR.
+
+6. **Manual approval** — PR harus di-review dan di-approve manual via GitHub UI sebelum bisa di-merge. Branch `main` dilindungi dengan **branch protection rules**:
+   - Require pull request before merging
+   - Require status checks to pass (CI)
+   - Require conversation resolution
+   - No force push to `main`
+
+7. **Merge** — setelah approved, merge PR via GitHub UI (Squash and merge recommended).
+
+**Aturan branch protection sudah dikonfigurasi.** Lihat [CONTRIBUTING.md](CONTRIBUTING.md) untuk detail lengkap.
+
 ## Security
 
 For security concerns, please read [SECURITY.md](SECURITY.md) and report vulnerabilities privately.

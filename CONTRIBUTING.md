@@ -4,7 +4,7 @@ Thank you for your interest in contributing to Inbix! This document covers every
 
 ## Prerequisites
 
-- Node.js 20+
+- Node.js 22+
 - pnpm 11+
 - A Cloudflare account (for testing Workers locally)
 
@@ -93,11 +93,30 @@ chore: bump dependencies
 
 ### Pull Requests
 
-1. Create a feature branch: `git checkout -b feat/my-feature`
+**Semua perubahan wajib melalui Pull Request.** Tidak ada push langsung ke `main`.
+
+1. Create a feature branch from `main`:
+   ```bash
+   git checkout main && git pull origin main
+   git checkout -b feat/my-feature      # feature
+   git checkout -b fix/my-bug           # bug fix
+   git checkout -b docs/my-docs         # documentation
+   git checkout -b refactor/my-refactor # refactoring
+   ```
 2. Make your changes
 3. Ensure `pnpm typecheck` and `pnpm build` pass
 4. Push and create a PR using the [PR template](.github/PULL_REQUEST_TEMPLATE.md)
 5. Link any related issues
+6. Wait for CI to pass (typecheck, build, security audit)
+7. Request review — PR must be **manually approved** via GitHub UI before merging
+8. Merge via **Squash and merge** (recommended)
+
+**Branch protection rules** on `main`:
+- Require pull request before merging
+- Require approval (at least 1 reviewer)
+- Require status checks to pass (CI)
+- Require conversation resolution
+- No force push
 
 ### PR Checklist
 
