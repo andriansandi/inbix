@@ -8,9 +8,11 @@ export type HonoEnv = {
     APP_DOMAIN: string;
     CORS_ORIGIN: string;
     RATE_LIMIT_KV: KVNamespace;
+    CLERK_SECRET_KEY: string;
   };
   Variables: {
     requestId: string;
+    userId?: string;
   };
 };
 

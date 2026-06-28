@@ -5,6 +5,7 @@ import type {
   Attachment,
   PaginatedResponse,
 } from "@inbix/shared";
+import { getAuthToken } from "./authToken";
 
 const API_BASE = import.meta.env.VITE_API_URL ?? "";
 
@@ -13,9 +14,15 @@ async function request<T>(
   path: string,
   body?: unknown
 ): Promise<T> {
+  const token = getAuthToken();
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const res = await fetch(`${API_BASE}${path}`, {
     method,
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: body ? JSON.stringify(body) : undefined,
   });
 

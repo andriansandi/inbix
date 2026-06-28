@@ -1,4 +1,4 @@
-import { eq, desc, lt, and, count } from "drizzle-orm";
+import { eq, desc, lt, and, count, isNull } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import * as schema from "../schema";
 import { generateInboxId, generateMessageId } from "@inbix/shared";
@@ -13,7 +13,8 @@ export async function createInbox(
   db: Database,
   emailAddress: string,
   domain: string,
-  expiresAt: number
+  expiresAt: number,
+  userId?: string
 ) {
   const id = generateInboxId();
   const createdAt = Date.now();
@@ -21,11 +22,12 @@ export async function createInbox(
     id,
     emailAddress,
     domain,
+    userId: userId ?? null,
     createdAt,
     expiresAt,
     isActive: true,
   });
-  return { id, emailAddress, domain, createdAt, expiresAt, isActive: true };
+  return { id, emailAddress, domain, userId: userId ?? null, createdAt, expiresAt, isActive: true };
 }
 
 export async function getInbox(db: Database, id: string) {
@@ -49,21 +51,52 @@ export async function getInboxByEmail(db: Database, emailAddress: string) {
 export async function listInboxes(
   db: Database,
   page: number,
-  pageSize: number
+  pageSize: number,
+  userId?: string
 ) {
   const offset = (page - 1) * pageSize;
+  const condition = userId
+    ? and(eq(schema.inboxes.isActive, true), eq(schema.inboxes.userId, userId))
+    : eq(schema.inboxes.isActive, true);
   const [rows, [{ total }]] = await Promise.all([
     db
       .select()
       .from(schema.inboxes)
-      .where(eq(schema.inboxes.isActive, true))
+      .where(condition)
       .orderBy(desc(schema.inboxes.createdAt))
       .limit(pageSize)
       .offset(offset),
     db
       .select({ total: count() })
       .from(schema.inboxes)
-      .where(eq(schema.inboxes.isActive, true)),
+      .where(condition),
+  ]);
+  return { rows, total };
+}
+
+export async function countInboxesByUser(db: Database, userId: string) {
+  const [{ total }] = await db
+    .select({ total: count() })
+    .from(schema.inboxes)
+    .where(and(eq(schema.inboxes.isActive, true), eq(schema.inboxes.userId, userId)));
+  return total;
+}
+
+export async function listAnonymousInboxes(db: Database, page: number, pageSize: number) {
+  const offset = (page - 1) * pageSize;
+  const condition = and(eq(schema.inboxes.isActive, true), isNull(schema.inboxes.userId));
+  const [rows, [{ total }]] = await Promise.all([
+    db
+      .select()
+      .from(schema.inboxes)
+      .where(condition)
+      .orderBy(desc(schema.inboxes.createdAt))
+      .limit(pageSize)
+      .offset(offset),
+    db
+      .select({ total: count() })
+      .from(schema.inboxes)
+      .where(condition),
   ]);
   return { rows, total };
 }

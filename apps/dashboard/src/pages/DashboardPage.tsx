@@ -24,7 +24,7 @@ import { formatRelativeTime, cn } from "../lib/utils";
 export function DashboardPage() {
   const { inboxId } = useParams<{ inboxId?: string }>();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoaded } = useAuth();
 
   const [inboxList, setInboxList] = useState<Inbox[]>([]);
   const [listLoading, setListLoading] = useState(false);
@@ -58,7 +58,7 @@ export function DashboardPage() {
   }, [inbox]);
 
   const handleCreateInbox = async () => {
-    if (!isAuthenticated && inboxList.length >= ANONYMOUS_INBOX_LIMIT) {
+    if (isLoaded && !isAuthenticated && inboxList.length >= ANONYMOUS_INBOX_LIMIT) {
       setShowInboxLimitModal(true);
       return;
     }
@@ -319,7 +319,7 @@ export function DashboardPage() {
             <button
               onClick={() => {
                 setShowInboxLimitModal(false);
-                navigate("/auth");
+                navigate("/sign-in");
               }}
               className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
             >

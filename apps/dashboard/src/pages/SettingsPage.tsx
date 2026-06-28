@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { KeyRound, User, Bell, Webhook, Copy, Check } from "lucide-react";
+import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { cn } from "../lib/utils";
@@ -96,7 +97,7 @@ export function SettingsPage() {
 
                 <button
                   className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
-                  onClick={() => alert("API key generation requires authentication. Clerk integration is planned.")}
+                  onClick={() => alert("API key generation is coming soon.")}
                 >
                   <KeyRound className="h-4 w-4" />
                   Generate New Key
@@ -112,12 +113,29 @@ export function SettingsPage() {
                     Update your account information.
                   </p>
                 </div>
-                <div className="rounded-xl border border-border bg-card p-6">
-                  <p className="text-sm text-muted-foreground">
-                    Profile management requires Clerk authentication.
-                    Sign in to manage your profile, email, and password.
-                  </p>
-                </div>
+                <SignedIn>
+                  <div className="rounded-xl border border-border bg-card p-6">
+                    <div className="flex items-center gap-4">
+                      <UserButton afterSignOutUrl="/" />
+                      <div>
+                        <p className="text-sm font-medium">
+                          Manage your profile
+                        </p>
+                        <p className="mt-0.5 text-sm text-muted-foreground">
+                          Update your name, email, password, and connected
+                          accounts via the account dashboard.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </SignedIn>
+                <SignedOut>
+                  <div className="rounded-xl border border-border bg-card p-6">
+                    <p className="text-sm text-muted-foreground">
+                      Sign in to manage your profile, email, and password.
+                    </p>
+                  </div>
+                </SignedOut>
               </div>
             )}
 
@@ -149,8 +167,8 @@ export function SettingsPage() {
                 </div>
                 <div className="rounded-xl border border-border bg-card p-6">
                   <p className="text-sm text-muted-foreground">
-                    Notification preferences require authentication.
-                    Sign in to manage email and webhook notifications.
+                    Notification preferences are coming soon. Sign in to manage
+                    push and email notifications for your inboxes.
                   </p>
                 </div>
               </div>
