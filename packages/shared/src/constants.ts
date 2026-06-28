@@ -6,7 +6,9 @@ export const APP_VERSION = "0.1.0";
 export const DEFAULT_PAGE_SIZE = 20;
 export const MAX_PAGE_SIZE = 100;
 
-export const DEFAULT_INBOX_TTL_SECONDS = 24 * 60 * 60;
+export const ANONYMOUS_INBOX_TTL_SECONDS = 60 * 60;
+export const AUTHENTICATED_INBOX_TTL_SECONDS = 12 * 60 * 60;
+export const DEFAULT_INBOX_TTL_SECONDS = ANONYMOUS_INBOX_TTL_SECONDS;
 export const MAX_INBOX_TTL_SECONDS = 7 * 24 * 60 * 60;
 export const MIN_INBOX_TTL_SECONDS = 60;
 
