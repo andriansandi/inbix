@@ -79,10 +79,10 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 sm:flex-row">
           <p className="text-sm text-muted-foreground">
-            Open Source. MIT License.
+            MIT License.
           </p>
           <p className="text-sm text-muted-foreground">
-            © 2025 Andrian Sandi
+            built ❤ by KODR
           </p>
         </div>
       </div>
