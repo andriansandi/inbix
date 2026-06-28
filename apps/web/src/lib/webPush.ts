@@ -251,11 +251,12 @@ async function encryptPayload(
   );
 
   const recordSize = 4096;
-  const header = new Uint8Array(16 + 4 + ephemeralPublicKey.length);
+  const header = new Uint8Array(16 + 4 + 1 + ephemeralPublicKey.length);
   header.set(salt, 0);
   const rsView = new DataView(header.buffer, 16, 4);
   rsView.setUint32(0, recordSize, false);
-  header.set(ephemeralPublicKey, 20);
+  header[20] = ephemeralPublicKey.length;
+  header.set(ephemeralPublicKey, 21);
 
   const output = new Uint8Array(header.length + encrypted.length);
   output.set(header, 0);
