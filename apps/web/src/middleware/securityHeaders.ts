@@ -14,7 +14,7 @@ export const securityHeaders = createMiddleware<HonoEnv>(async (c, next) => {
   if (!c.res.headers.get("Content-Security-Policy")) {
     c.header(
       "Content-Security-Policy",
-      "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; frame-ancestors 'self';"
+      "default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-ancestors 'self';"
     );
   }
   c.header("X-XSS-Protection", "1; mode=block");
