@@ -1,8 +1,14 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Github } from "lucide-react";
 import { LogoMark } from "@inbix/ui";
+import { Modal } from "../components/Modal";
+import { ANONYMOUS_INBOX_LIMIT, FREE_TIER_INBOX_LIMIT } from "@inbix/shared";
 
 export function AuthPage() {
+  const navigate = useNavigate();
+  const [showAnonymousConfirm, setShowAnonymousConfirm] = useState(false);
+
   return (
     <div className="flex min-h-[100dvh] flex-col bg-background">
       <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center px-6 py-12">
@@ -22,14 +28,14 @@ export function AuthPage() {
           <div className="mt-6 space-y-3">
             <button
               className="flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent active:scale-[0.98]"
-              onClick={() => alert("Clerk authentication is planned. Use the dashboard without an account for now.")}
+              onClick={() => alert("Authentication is planned. Use the dashboard without an account for now.")}
             >
               <Github className="h-4 w-4" />
               Continue with GitHub
             </button>
             <button
               className="flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent active:scale-[0.98]"
-              onClick={() => alert("Clerk authentication is planned. Use the dashboard without an account for now.")}
+              onClick={() => alert("Authentication is planned. Use the dashboard without an account for now.")}
             >
               <svg className="h-4 w-4" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -50,7 +56,7 @@ export function AuthPage() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              alert("Clerk authentication is planned. Use the dashboard without an account for now.");
+              alert("Authentication is planned. Use the dashboard without an account for now.");
             }}
             className="space-y-4"
           >
@@ -74,19 +80,54 @@ export function AuthPage() {
           </form>
 
           <p className="mt-6 text-center text-xs text-muted-foreground">
-            Authentication is powered by Clerk. Passkeys, magic links,
-            and social login will be available.
+            Authentication supports passkeys, magic links,
+            and social login.
           </p>
         </div>
 
-        <Link
-          to="/dashboard"
+        <button
+          onClick={() => setShowAnonymousConfirm(true)}
           className="mt-6 inline-flex items-center justify-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Continue without account
-        </Link>
+        </button>
       </div>
+
+      <Modal
+        open={showAnonymousConfirm}
+        onClose={() => setShowAnonymousConfirm(false)}
+      >
+        <div className="space-y-4">
+          <div className="space-y-1.5 pr-6">
+            <h2 className="text-lg font-semibold tracking-tight">
+              Continue without account?
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Without an account you're limited to {ANONYMOUS_INBOX_LIMIT} active
+              inbox with 60-minute retention. Create an account for up to{" "}
+              {FREE_TIER_INBOX_LIMIT} mailboxes and 12-hour retention.
+            </p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={() => {
+                setShowAnonymousConfirm(false);
+                navigate("/dashboard");
+              }}
+              className="flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
+            >
+              Continue without account
+            </button>
+            <button
+              onClick={() => setShowAnonymousConfirm(false)}
+              className="flex w-full items-center justify-center rounded-lg border border-border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent active:scale-[0.98]"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
