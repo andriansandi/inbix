@@ -11,6 +11,8 @@ import { inboxRoutes } from "./routes/inboxes";
 import { messageRoutes } from "./routes/messages";
 import { healthRoutes } from "./routes/health";
 import { domainRoutes } from "./routes/domains";
+import { pushRoutes } from "./routes/push";
+import { notificationRoutes } from "./routes/notifications";
 
 export function createApp() {
   const app = new Hono<HonoEnv>();
@@ -28,7 +30,7 @@ export function createApp() {
         }
         return null;
       },
-      allowMethods: ["GET", "POST", "DELETE", "OPTIONS"],
+      allowMethods: ["GET", "POST", "DELETE", "PATCH", "OPTIONS"],
       allowHeaders: ["Content-Type", "Authorization"],
       exposeHeaders: ["X-Request-Id"],
       maxAge: 86400,
@@ -42,6 +44,8 @@ export function createApp() {
   app.route("/api/inboxes", inboxRoutes);
   app.route("/api/messages", messageRoutes);
   app.route("/api/domains", domainRoutes);
+  app.route("/api/push", pushRoutes);
+  app.route("/api/notifications", notificationRoutes);
 
   app.notFound(notFoundHandler);
   app.onError(errorHandler);

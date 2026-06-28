@@ -42,7 +42,9 @@
     "ENVIRONMENT": "production",
     "APP_DOMAIN": "inbix.xyz",
     "CORS_ORIGIN": "https://inbix.xyz",
-    "CLERK_PUBLISHABLE_KEY": "pk_live_Y2xlcmsuaW5iaXgueHl6JA"
+    "CLERK_PUBLISHABLE_KEY": "pk_live_Y2xlcmsuaW5iaXgueHl6JA",
+    "VAPID_PUBLIC_KEY": "",
+    "VAPID_SUBJECT": "mailto:noreply@inbix.xyz"
   },
 
   "observability": {

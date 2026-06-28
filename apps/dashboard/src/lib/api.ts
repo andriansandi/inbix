@@ -4,6 +4,8 @@ import type {
   Message,
   Attachment,
   PaginatedResponse,
+  PushSubscription,
+  NotificationPreferences,
 } from "@inbix/shared";
 import { getAuthToken } from "./authToken";
 
@@ -65,4 +67,25 @@ export const api = {
 
   getAttachmentUrl: (messageId: string, attachmentId: string) =>
     `${API_BASE}/api/messages/${messageId}/attachments/${attachmentId}`,
+
+  getVapidPublicKey: () =>
+    request<{ publicKey: string }>("GET", "/api/push/vapid-public-key"),
+
+  pushSubscribe: (subscription: { endpoint: string; keys: { p256dh: string; auth: string } }) =>
+    request<PushSubscription>("POST", "/api/push/subscribe", subscription),
+
+  pushUnsubscribe: (endpoint: string) =>
+    request<void>("DELETE", "/api/push/subscribe", { endpoint }),
+
+  getPushSubscriptions: () =>
+    request<PushSubscription[]>("GET", "/api/push/subscriptions"),
+
+  getNotificationPreferences: () =>
+    request<NotificationPreferences>("GET", "/api/notifications/preferences"),
+
+  updateNotificationPreferences: (prefs: Partial<NotificationPreferences>) =>
+    request<NotificationPreferences>("PATCH", "/api/notifications/preferences", prefs),
+
+  sendTestNotification: () =>
+    request<{ sent: number; failed: number; results: unknown[] }>("POST", "/api/notifications/test"),
 };

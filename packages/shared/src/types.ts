@@ -86,3 +86,26 @@ export interface SSEEvent {
   type: "message" | "inbox_expired" | "heartbeat";
   data: unknown;
 }
+
+export interface PushSubscription {
+  id: string;
+  endpoint: string;
+  createdAt: number;
+  isActive: boolean;
+}
+
+export interface NotificationPreferences {
+  pushEnabled: boolean;
+  quietHoursStart: number | null;
+  quietHoursEnd: number | null;
+  notifyOnNewMessage: boolean;
+}
+
+export interface PushNotificationPayload {
+  title: string;
+  body: string;
+  icon?: string;
+  badge?: string;
+  url?: string;
+  timestamp: number;
+}

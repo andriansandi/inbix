@@ -10,6 +10,9 @@ export type HonoEnv = {
     RATE_LIMIT_KV: KVNamespace;
     CLERK_SECRET_KEY: string;
     CLERK_PUBLISHABLE_KEY: string;
+    VAPID_PUBLIC_KEY: string;
+    VAPID_PRIVATE_KEY: string;
+    VAPID_SUBJECT: string;
   };
   Variables: {
     requestId: string;
@@ -23,5 +26,8 @@ export type EmailEnv = {
     R2_BUCKET: R2Bucket;
     CACHE: KVNamespace;
     APP_DOMAIN: string;
+    VAPID_PUBLIC_KEY: string;
+    VAPID_PRIVATE_KEY: string;
+    VAPID_SUBJECT: string;
   };
 };

@@ -355,3 +355,5 @@ export async function getStats(db: Database) {
     attachments: attachmentCount[0]?.total ?? 0,
   };
 }
+
+export * from "./notifications";

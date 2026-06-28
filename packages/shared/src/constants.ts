@@ -36,3 +36,7 @@ export const SSE_RETRY_MS = 5_000;
 export const EXPIRY_CHECK_INTERVAL_MS = 60_000;
 
 export const CORS_ALLOWED_ORIGINS = ["https://inbix.xyz", "http://localhost:5173"];
+
+export const PUSH_TTL_SECONDS = 24 * 60 * 60;
+export const PUSH_MAX_SUBSCRIPTIONS_PER_USER = 10;
+export const PUSH_PAYLOAD_MAX_BYTES = 4 * 1024;
