@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, ArrowRight, Github } from "lucide-react";
+import { UserButton, SignedIn, SignedOut } from "@clerk/clerk-react";
 import { LogoMark } from "@inbix/ui";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -53,6 +54,19 @@ export function Navbar() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
+          <SignedOut>
+            <Link
+              to="/sign-in"
+              className="hidden text-sm text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+            >
+              Sign In
+            </Link>
+          </SignedOut>
+          <SignedIn>
+            <div className="hidden sm:block">
+              <UserButton afterSignOutUrl="/" />
+            </div>
+          </SignedIn>
           <a
             href="https://github.com/andriansandi/inbix"
             target="_blank"
@@ -111,6 +125,21 @@ export function Navbar() {
             >
               GitHub
             </a>
+            <SignedOut>
+              <Link
+                to="/sign-in"
+                onClick={() => setMenuOpen(false)}
+                className="rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground"
+              >
+                Sign In
+              </Link>
+            </SignedOut>
+            <SignedIn>
+              <div className="flex items-center gap-2 rounded-lg px-3 py-2">
+                <UserButton afterSignOutUrl="/" />
+                <span className="text-sm text-muted-foreground">Account</span>
+              </div>
+            </SignedIn>
             <Link
               to="/dashboard"
               onClick={() => setMenuOpen(false)}
@@ -141,6 +170,17 @@ export function DashboardNav() {
         >
           Settings
         </Link>
+        <SignedOut>
+          <Link
+            to="/sign-in"
+            className="inline-flex h-9 items-center rounded-lg px-3 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          >
+            Sign In
+          </Link>
+        </SignedOut>
+        <SignedIn>
+          <UserButton afterSignOutUrl="/" />
+        </SignedIn>
         <a
           href="https://github.com/andriansandi/inbix"
           target="_blank"

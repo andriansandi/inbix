@@ -5,6 +5,7 @@ import { requestId } from "./middleware/requestId";
 import { errorHandler, notFoundHandler } from "./middleware/error";
 import { rateLimit } from "./middleware/rateLimit";
 import { securityHeaders } from "./middleware/securityHeaders";
+import { authMiddleware } from "./middleware/auth";
 import type { HonoEnv } from "./lib/env";
 import { inboxRoutes } from "./routes/inboxes";
 import { messageRoutes } from "./routes/messages";
@@ -34,6 +35,7 @@ export function createApp() {
     })
   );
 
+  app.use("/api/*", authMiddleware);
   app.use("/api/*", rateLimit);
 
   app.route("/api", healthRoutes);

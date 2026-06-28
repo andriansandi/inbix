@@ -5,7 +5,9 @@ import {
   errorResponse,
   createInboxSchema,
   paginationSchema,
-  DEFAULT_INBOX_TTL_SECONDS,
+  ANONYMOUS_INBOX_TTL_SECONDS,
+  AUTHENTICATED_INBOX_TTL_SECONDS,
+  FREE_TIER_INBOX_LIMIT,
   generateId,
 } from "@inbix/shared";
 import {
@@ -13,6 +15,7 @@ import {
   createInbox,
   getInbox,
   listInboxes,
+  countInboxesByUser,
   deleteInbox,
   getDefaultDomain,
   listMessages,
@@ -31,7 +34,15 @@ inboxRoutes.post("/", async (c) => {
   }
 
   const { domain, ttlSeconds } = parsed.data;
+  const userId = c.get("userId");
   const db = createDatabase(c.env.DB);
+
+  if (userId) {
+    const userInboxCount = await countInboxesByUser(db, userId);
+    if (userInboxCount >= FREE_TIER_INBOX_LIMIT) {
+      return errorResponse(`Inbox limit reached (${FREE_TIER_INBOX_LIMIT} max for free tier)`, 403);
+    }
+  }
 
   let targetDomain = domain;
 
@@ -40,12 +51,12 @@ inboxRoutes.post("/", async (c) => {
     targetDomain = defaultDomain?.domain ?? c.env.APP_DOMAIN ?? "example.com";
   }
 
-  const ttl = ttlSeconds ?? DEFAULT_INBOX_TTL_SECONDS;
+  const ttl = ttlSeconds ?? (userId ? AUTHENTICATED_INBOX_TTL_SECONDS : ANONYMOUS_INBOX_TTL_SECONDS);
   const localPart = generateId(10);
   const emailAddress = `${localPart}@${targetDomain}`;
   const expiresAt = Date.now() + ttl * 1000;
 
-  const inbox = await createInbox(db, emailAddress, targetDomain, expiresAt);
+  const inbox = await createInbox(db, emailAddress, targetDomain, expiresAt, userId);
 
   await c.env.CACHE.put(
     `inbox:${emailAddress}`,
@@ -63,8 +74,9 @@ inboxRoutes.get("/", async (c) => {
     return errorResponse("Invalid pagination parameters", 400);
   }
 
+  const userId = c.get("userId");
   const db = createDatabase(c.env.DB);
-  const { rows, total } = await listInboxes(db, query.data.page, query.data.pageSize);
+  const { rows, total } = await listInboxes(db, query.data.page, query.data.pageSize, userId);
   const totalPages = Math.ceil(total / query.data.pageSize);
 
   return json({

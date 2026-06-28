@@ -1,40 +1,28 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { useUser, useClerk, useAuth as useClerkAuth } from "@clerk/clerk-react";
 
 export interface AuthUser {
   id: string;
   email: string;
 }
 
-interface AuthContextValue {
-  user: AuthUser | null;
-  isAuthenticated: boolean;
-  signIn: (user: AuthUser) => void;
-  signOut: () => void;
-}
-
-const AuthContext = createContext<AuthContextValue | null>(null);
-
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(null);
-
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated: user !== null,
-        signIn: setUser,
-        signOut: () => setUser(null),
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-}
-
 export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return ctx;
+  const { user: clerkUser, isLoaded, isSignedIn } = useUser();
+  const { signOut } = useClerk();
+  const { getToken } = useClerkAuth();
+
+  const user: AuthUser | null =
+    isSignedIn && clerkUser
+      ? {
+          id: clerkUser.id,
+          email: clerkUser.primaryEmailAddress?.emailAddress ?? "",
+        }
+      : null;
+
+  return {
+    user,
+    isAuthenticated: isSignedIn ?? false,
+    isLoaded,
+    signOut: () => signOut(),
+    getToken: () => getToken(),
+  };
 }
