@@ -6,6 +6,7 @@ import { SettingsPage } from "./pages/SettingsPage";
 import { SignInPage, SignUpPage } from "./pages/AuthPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { ScrollManager } from "./components/ScrollManager";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 export function App() {
   return (
@@ -16,7 +17,7 @@ export function App() {
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/dashboard/:inboxId" element={<DashboardPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
         <Route path="/sign-in/*" element={<SignInPage />} />
         <Route path="/sign-up/*" element={<SignUpPage />} />
         <Route path="/auth" element={<Navigate to="/sign-in" replace />} />

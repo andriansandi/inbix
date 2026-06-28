@@ -164,12 +164,14 @@ export function DashboardNav() {
       </Link>
       <div className="flex items-center gap-2">
         <ThemeToggle />
-        <Link
-          to="/settings"
-          className="hidden h-9 items-center rounded-lg px-3 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground sm:inline-flex"
-        >
-          Settings
-        </Link>
+        <SignedIn>
+          <Link
+            to="/settings"
+            className="hidden h-9 items-center rounded-lg px-3 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground sm:inline-flex"
+          >
+            Settings
+          </Link>
+        </SignedIn>
         <SignedOut>
           <Link
             to="/sign-in"
