@@ -8,30 +8,40 @@ const app = createApp();
 export default {
   async fetch(request: Request, env: HonoEnv["Bindings"], ctx: ExecutionContext): Promise<Response> {
     ctx.waitUntil(cleanupExpiredData(env).catch(() => {}));
-    const response = await app.fetch(request, env, ctx);
     const url = new URL(request.url);
+
+    if (url.pathname.startsWith("/api/")) {
+      return app.fetch(request, env, ctx);
+    }
+
+    const assetResponse = await env.ASSETS.fetch(request);
+    if (assetResponse.status !== 404) {
+      return assetResponse;
+    }
+
     if (
-      response.status === 404 &&
       request.method === "GET" &&
-      !url.pathname.startsWith("/api/") &&
       (request.headers.get("accept") ?? "").includes("text/html")
     ) {
-      const assetResponse = await env.ASSETS.fetch(new Request(new URL("/index.html", url)));
+      const htmlResponse = await env.ASSETS.fetch(
+        new Request(new URL("/index.html", url))
+      );
       if (env.CLERK_PUBLISHABLE_KEY) {
-        const html = await assetResponse.text();
+        const html = await htmlResponse.text();
         const injected = html.replace(
           "<head>",
           `<head><script>window.__CLERK_PUBLISHABLE_KEY__=${JSON.stringify(env.CLERK_PUBLISHABLE_KEY)};</script>`
         );
         return new Response(injected, {
-          status: assetResponse.status,
-          statusText: assetResponse.statusText,
-          headers: assetResponse.headers,
+          status: htmlResponse.status,
+          statusText: htmlResponse.statusText,
+          headers: htmlResponse.headers,
         });
       }
-      return assetResponse;
+      return htmlResponse;
     }
-    return response;
+
+    return new Response("Not Found", { status: 404 });
   },
 
   async email(message: ForwardableEmailMessage, env: EmailEnv["Bindings"], ctx: ExecutionContext): Promise<void> {
