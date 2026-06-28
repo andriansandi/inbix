@@ -13,15 +13,16 @@ const cloudTiers = [
     features: [
       "1 active inbox (anonymous)",
       "5 inboxes with account",
-      "30-minute retention",
+      "60-minute retention",
       "Shared public domains",
       "Web Dashboard",
       "Basic REST API",
       "Limited API requests",
     ],
     cta: "Get Started",
-    ctaTo: "/dashboard",
+    ctaTo: "/auth",
     highlighted: false,
+    disabled: false,
   },
   {
     name: "Pro",
@@ -40,8 +41,9 @@ const cloudTiers = [
       "Ad-free",
     ],
     cta: "Upgrade to Pro",
-    ctaTo: "/dashboard",
+    ctaTo: "/auth",
     highlighted: true,
+    disabled: true,
   },
   {
     name: "Team",
@@ -59,8 +61,9 @@ const cloudTiers = [
       "Higher API Limits",
     ],
     cta: "Upgrade to Team",
-    ctaTo: "/dashboard",
+    ctaTo: "/auth",
     highlighted: false,
+    disabled: true,
   },
 ];
 
@@ -120,18 +123,34 @@ export function PricingPage() {
                   <p className="mt-1 text-xs text-muted-foreground">or $24/year</p>
                 )}
 
-                <Link
-                  to={tier.ctaTo}
-                  className={cn(
-                    "mt-6 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all active:scale-[0.98]",
-                    tier.highlighted
-                      ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                      : "border border-border hover:bg-accent"
-                  )}
-                >
-                  {tier.cta}
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
+                {tier.disabled ? (
+                  <button
+                    disabled
+                    title="Coming soon"
+                    className={cn(
+                      "mt-6 inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium opacity-50",
+                      tier.highlighted
+                        ? "bg-primary text-primary-foreground"
+                        : "border border-border"
+                    )}
+                  >
+                    {tier.cta}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                ) : (
+                  <Link
+                    to={tier.ctaTo}
+                    className={cn(
+                      "mt-6 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all active:scale-[0.98]",
+                      tier.highlighted
+                        ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                        : "border border-border hover:bg-accent"
+                    )}
+                  >
+                    {tier.cta}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                )}
 
                 <ul className="mt-8 space-y-3">
                   {tier.features.map((feature) => (
