@@ -8,11 +8,12 @@ import {
   createAttachment,
 } from "@inbix/database";
 import { sanitizeFilename } from "@inbix/shared";
+import { notifyNewMessage } from "../lib/notify";
 
 export async function handleEmail(
   message: ForwardableEmailMessage,
   env: EmailEnv["Bindings"],
-  _ctx: ExecutionContext
+  ctx: ExecutionContext
 ): Promise<void> {
   const toAddress = message.to;
   const domain = getDomainFromEmail(toAddress);
@@ -79,5 +80,20 @@ export async function handleEmail(
 
   console.info(
     `[email] Stored message ${msgRecord.id} for inbox ${inbox.id} (${inbox.emailAddress})`
+  );
+
+  ctx.waitUntil(
+    notifyNewMessage(
+      env,
+      { id: inbox.id, emailAddress: inbox.emailAddress, userId: inbox.userId ?? null },
+      {
+        id: msgRecord.id,
+        fromAddress: msgRecord.fromAddress,
+        fromName: msgRecord.fromName,
+        subject: msgRecord.subject,
+      }
+    ).catch((err) => {
+      console.warn(`[email] Push notification failed:`, err);
+    })
   );
 }

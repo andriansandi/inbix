@@ -37,3 +37,21 @@ export type CreateInboxInput = z.infer<typeof createInboxSchema>;
 export type PaginationInput = z.infer<typeof paginationSchema>;
 export type CreateApiKeyInput = z.infer<typeof createApiKeySchema>;
 export type AddDomainInput = z.infer<typeof addDomainSchema>;
+
+export const pushSubscribeSchema = z.object({
+  endpoint: z.string().url(),
+  keys: z.object({
+    p256dh: z.string().min(1),
+    auth: z.string().min(1),
+  }),
+});
+
+export const notificationPreferencesSchema = z.object({
+  pushEnabled: z.boolean().optional(),
+  quietHoursStart: z.number().int().min(0).max(23).nullable().optional(),
+  quietHoursEnd: z.number().int().min(0).max(23).nullable().optional(),
+  notifyOnNewMessage: z.boolean().optional(),
+});
+
+export type PushSubscribeInput = z.infer<typeof pushSubscribeSchema>;
+export type NotificationPreferencesInput = z.infer<typeof notificationPreferencesSchema>;

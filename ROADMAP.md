@@ -122,16 +122,16 @@ Cloudflare-native, API-first, and built on open web standards.
 
 Implement browser push notifications using the Web Push standard.
 
-- [ ] Browser Push API
-- [ ] Service Worker
-- [ ] VAPID key management
-- [ ] Push subscription endpoint
-- [ ] Store subscriptions in D1
-- [ ] Send notification from Email Worker
-- [ ] Click notification opens mailbox
-- [ ] Multiple devices per account
-- [ ] Notification permission management
-- [ ] Unsubscribe support
+- [x] Browser Push API
+- [x] Service Worker
+- [x] VAPID key management
+- [x] Push subscription endpoint
+- [x] Store subscriptions in D1
+- [x] Send notification from Email Worker
+- [x] Click notification opens mailbox
+- [x] Multiple devices per account
+- [x] Notification permission management
+- [x] Unsubscribe support
 
 Notification payload:
 
@@ -152,9 +152,9 @@ Acceptance criteria:
 
 Allow users to configure notification behavior.
 
-- [ ] Enable/disable push
+- [x] Enable/disable push
 - [ ] Per mailbox settings
-- [ ] Quiet hours
+- [x] Quiet hours
 - [ ] Notification sound
 - [ ] Priority notifications
 - [ ] Only notify for important mail
@@ -200,27 +200,27 @@ Future adapters:
 
 ### API Endpoints
 
-- [ ] `POST /push/subscribe`
-- [ ] `DELETE /push/subscribe`
-- [ ] `GET /push/subscriptions`
-- [ ] `PATCH /push/preferences`
-- [ ] `POST /notifications/test`
+- [x] `POST /push/subscribe`
+- [x] `DELETE /push/subscribe`
+- [x] `GET /push/subscriptions`
+- [x] `PATCH /push/preferences`
+- [x] `POST /notifications/test`
 
 ### Database
 
 New tables:
 
-- [ ] `push_subscriptions`
-- [ ] `notification_preferences`
-- [ ] `notification_logs`
+- [x] `push_subscriptions`
+- [x] `notification_preferences`
+- [x] `notification_logs`
 
 ### Security
 
 - [ ] VAPID key rotation
-- [ ] Subscription validation
-- [ ] Rate limiting
-- [ ] Abuse protection
-- [ ] Device ownership verification
+- [x] Subscription validation
+- [x] Rate limiting
+- [x] Abuse protection
+- [x] Device ownership verification
 
 ### Developer Experience
 

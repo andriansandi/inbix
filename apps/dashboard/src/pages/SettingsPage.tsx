@@ -3,6 +3,7 @@ import { KeyRound, User, Bell, Webhook, Copy, Check } from "lucide-react";
 import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
+import { NotificationsTab } from "../components/NotificationsTab";
 import { cn } from "../lib/utils";
 
 const tabs = [
@@ -157,22 +158,7 @@ export function SettingsPage() {
               </div>
             )}
 
-            {activeTab === "notifications" && (
-              <div className="space-y-6">
-                <div>
-                  <h2 className="text-lg font-semibold">Notifications</h2>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Configure how you receive notifications about your inboxes.
-                  </p>
-                </div>
-                <div className="rounded-xl border border-border bg-card p-6">
-                  <p className="text-sm text-muted-foreground">
-                    Notification preferences are coming soon. Sign in to manage
-                    push and email notifications for your inboxes.
-                  </p>
-                </div>
-              </div>
-            )}
+            {activeTab === "notifications" && <NotificationsTab />}
           </div>
         </div>
       </div>

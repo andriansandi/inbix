@@ -66,3 +66,5 @@ export const users = sqliteTable("users", {
   role: text("role", { enum: ["admin", "user"] }).notNull().default("user"),
   createdAt: integer("created_at").notNull(),
 });
+
+export * from "./notifications";
