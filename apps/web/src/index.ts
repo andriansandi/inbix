@@ -16,7 +16,20 @@ export default {
       !url.pathname.startsWith("/api/") &&
       (request.headers.get("accept") ?? "").includes("text/html")
     ) {
-      return env.ASSETS.fetch(new Request(new URL("/index.html", url)));
+      const assetResponse = await env.ASSETS.fetch(new Request(new URL("/index.html", url)));
+      if (env.CLERK_PUBLISHABLE_KEY) {
+        const html = await assetResponse.text();
+        const injected = html.replace(
+          "<head>",
+          `<head><script>window.__CLERK_PUBLISHABLE_KEY__=${JSON.stringify(env.CLERK_PUBLISHABLE_KEY)};</script>`
+        );
+        return new Response(injected, {
+          status: assetResponse.status,
+          statusText: assetResponse.statusText,
+          headers: assetResponse.headers,
+        });
+      }
+      return assetResponse;
     }
     return response;
   },
