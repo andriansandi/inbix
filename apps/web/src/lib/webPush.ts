@@ -103,9 +103,14 @@ async function hkdfExpand(
   return output;
 }
 
-function derToRawSignature(der: ArrayBuffer): Uint8Array {
-  const bytes = new Uint8Array(der);
-  if (bytes[0] !== 0x30) throw new Error("Invalid DER: expected SEQUENCE");
+function derToRawSignature(sig: ArrayBuffer): Uint8Array {
+  const bytes = new Uint8Array(sig);
+
+  if (bytes.length === 64) {
+    return bytes;
+  }
+
+  if (bytes[0] !== 0x30) throw new Error("Invalid signature format");
 
   let offset = 2;
 
