@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, ArrowRight, Github } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 import { UserButton, SignedIn, SignedOut } from "@clerk/clerk-react";
 import { LogoMark } from "@inbix/ui";
 import { ThemeToggle } from "./ThemeToggle";
@@ -67,15 +67,6 @@ export function Navbar() {
               <UserButton afterSignOutUrl="/" />
             </div>
           </SignedIn>
-          <a
-            href="https://github.com/andriansandi/inbix"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground sm:inline-flex"
-            aria-label="GitHub"
-          >
-            <Github className="h-4 w-4" />
-          </a>
           <Link
             to="/dashboard"
             className="hidden items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98] sm:inline-flex"
@@ -183,15 +174,6 @@ export function DashboardNav() {
         <SignedIn>
           <UserButton afterSignOutUrl="/" />
         </SignedIn>
-        <a
-          href="https://github.com/andriansandi/inbix"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          aria-label="GitHub"
-        >
-          <Github className="h-4 w-4" />
-        </a>
       </div>
     </header>
   );

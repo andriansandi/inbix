@@ -162,7 +162,7 @@ export function DashboardPage() {
             </button>
           </div>
 
-          <div className="overflow-y-auto" style={{ height: "calc(100dvh - 160px)" }}>
+          <div className="overflow-y-auto" style={{ height: "calc(100dvh - 192px)" }}>
             {inboxList.length === 0 ? (
               <div className="px-4 py-8 text-center">
                 <p className="text-sm text-muted-foreground">No inboxes yet</p>
@@ -290,6 +290,18 @@ export function DashboardPage() {
           )}
         </main>
       </div>
+
+      <footer className="flex h-8 shrink-0 items-center justify-between border-t border-border px-4 text-xs text-muted-foreground">
+        <span>MIT License · built by KODR</span>
+        <a
+          href="https://github.com/andriansandi/inbix"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="transition-colors hover:text-foreground"
+        >
+          GitHub
+        </a>
+      </footer>
 
       <Modal
         open={showInboxLimitModal}
