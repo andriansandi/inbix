@@ -9,6 +9,7 @@ export type HonoEnv = {
     CORS_ORIGIN: string;
     RATE_LIMIT_KV: KVNamespace;
     CLERK_SECRET_KEY: string;
+    CLERK_PUBLISHABLE_KEY: string;
   };
   Variables: {
     requestId: string;
