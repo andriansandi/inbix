@@ -101,6 +101,170 @@ This document outlines the planned development milestones for Inbix.
 
 ---
 
+## v0.4 — Notification Platform
+
+**Goal**: Real-time notifications when new emails arrive, fully
+Cloudflare-native, API-first, and built on open web standards.
+
+> Inbix's notification architecture is **Cloudflare-native,
+> event-driven, vendor-independent, and built on open web standards**.
+
+### Architecture Principles
+
+- Cloudflare Workers only
+- No Firebase dependency
+- Open Web Push standards
+- PWA compatible
+- Developer-first
+- Event-driven architecture
+
+### Phase 1 — Web Push Notifications (MVP)
+
+Implement browser push notifications using the Web Push standard.
+
+- [ ] Browser Push API
+- [ ] Service Worker
+- [ ] VAPID key management
+- [ ] Push subscription endpoint
+- [ ] Store subscriptions in D1
+- [ ] Send notification from Email Worker
+- [ ] Click notification opens mailbox
+- [ ] Multiple devices per account
+- [ ] Notification permission management
+- [ ] Unsubscribe support
+
+Notification payload:
+
+- `title`
+- `body`
+- `icon`
+- `badge`
+- `url`
+- `timestamp`
+
+Acceptance criteria:
+
+- Notification delivered within a few seconds after email arrives
+- Works on Chrome, Edge, Firefox and PWA
+- No third-party notification provider
+
+### Phase 2 — Notification Preferences
+
+Allow users to configure notification behavior.
+
+- [ ] Enable/disable push
+- [ ] Per mailbox settings
+- [ ] Quiet hours
+- [ ] Notification sound
+- [ ] Priority notifications
+- [ ] Only notify for important mail
+- [ ] Domain filters
+- [ ] Sender filters
+
+### Phase 3 — Notification Service
+
+Refactor notification logic into a dedicated service with an internal
+event pipeline.
+
+```
+Email Received
+      ↓
+Notification Event
+      ↓
+Notification Service
+      ↓
+Web Push Adapter
+```
+
+The service exposes an internal API so additional adapters can be
+added without modifying email processing.
+
+- [ ] Extract notification logic into Notification Service
+- [ ] Define internal notification event contract
+- [ ] Implement Web Push adapter
+- [ ] Add adapter registration mechanism
+
+### Phase 4 — Multi-Channel Notifications
+
+Expand notification delivery. Every adapter consumes the same
+notification event.
+
+Future adapters:
+
+- [ ] Mobile Push (FCM)
+- [ ] Apple Push (APNs)
+- [ ] Telegram
+- [ ] Slack
+- [ ] Discord
+- [ ] Generic Webhook
+
+### API Endpoints
+
+- [ ] `POST /push/subscribe`
+- [ ] `DELETE /push/subscribe`
+- [ ] `GET /push/subscriptions`
+- [ ] `PATCH /push/preferences`
+- [ ] `POST /notifications/test`
+
+### Database
+
+New tables:
+
+- [ ] `push_subscriptions`
+- [ ] `notification_preferences`
+- [ ] `notification_logs`
+
+### Security
+
+- [ ] VAPID key rotation
+- [ ] Subscription validation
+- [ ] Rate limiting
+- [ ] Abuse protection
+- [ ] Device ownership verification
+
+### Developer Experience
+
+Expose internal notification APIs for future integrations. The
+Notification Platform consumes these events instead of being tightly
+coupled to the email processing pipeline.
+
+Internal events:
+
+- `email.received`
+- `email.delivered`
+- `email.bounced`
+- `email.spam`
+- `mailbox.created`
+- `mailbox.deleted`
+
+### Non Goals
+
+The core platform must NOT rely on:
+
+- Firebase Cloud Messaging as the primary notification infrastructure
+- OneSignal
+- Proprietary push services
+
+These may be implemented later as optional adapters, but the core
+platform relies on the standard Web Push protocol.
+
+### GitHub Issues for v0.4
+- #37 Implement Web Push infrastructure (VAPID, service worker, subscription endpoint)
+- #38 Store push subscriptions in D1
+- #39 Send push notifications from Email Worker
+- #40 Notification click-through to mailbox
+- #41 Multi-device push subscription support
+- #42 Notification permission management and unsubscribe
+- #43 Notification preferences (per mailbox, quiet hours, filters)
+- #44 Refactor into Notification Service with event pipeline
+- #45 Multi-channel notification adapters (FCM, APNs, Telegram, Slack, Discord, Webhook)
+- #46 Push and notification API endpoints
+- #47 Notification database tables (push_subscriptions, notification_preferences, notification_logs)
+- #48 Notification security (VAPID rotation, validation, rate limiting, abuse protection)
+- #49 Internal notification event system (email.received, email.delivered, etc.)
+
+---
+
 ## v1.0 — Production
 
 **Goal**: Enterprise-ready, multi-tenant platform.
