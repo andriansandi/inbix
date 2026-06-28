@@ -192,14 +192,14 @@ No artificial limitations.
 Anonymous:
 
 - 1 Active Inbox
-- 30-minute retention
+- 60-minute retention
 - Shared public domains
 - Limited API
 
 Authenticated (Clerk):
 
 - 5 Active Inboxes
-- 30-minute retention
+- 12-hour retention
 - Shared public domains
 - Web Dashboard
 - Basic REST API

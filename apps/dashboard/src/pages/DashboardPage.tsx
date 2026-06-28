@@ -2,7 +2,12 @@ import { useState, useCallback, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Plus, Trash2, RefreshCw, ArrowLeft, Inbox as InboxIcon, MessageSquare, LogIn } from "lucide-react";
 import type { Inbox } from "@inbix/shared";
-import { ANONYMOUS_INBOX_LIMIT } from "@inbix/shared";
+import {
+  ANONYMOUS_INBOX_LIMIT,
+  FREE_TIER_INBOX_LIMIT,
+  ANONYMOUS_INBOX_TTL_SECONDS,
+  AUTHENTICATED_INBOX_TTL_SECONDS,
+} from "@inbix/shared";
 import { api } from "../lib/api";
 import { getStoredInboxes, addStoredInbox, removeStoredInbox } from "../lib/inboxStorage";
 import { useInbox } from "../hooks/useInbox";
@@ -58,7 +63,10 @@ export function DashboardPage() {
       return;
     }
     try {
-      const newInbox = await api.createInbox();
+      const ttlSeconds = isAuthenticated
+        ? AUTHENTICATED_INBOX_TTL_SECONDS
+        : ANONYMOUS_INBOX_TTL_SECONDS;
+      const newInbox = await api.createInbox({ ttlSeconds });
       setInboxList(addStoredInbox(newInbox));
       navigate(`/dashboard/${newInbox.id}`);
       setMobileView("messages");
@@ -82,7 +90,10 @@ export function DashboardPage() {
     }
     setShowInboxLimitModal(false);
     try {
-      const newInbox = await api.createInbox();
+      const ttlSeconds = isAuthenticated
+        ? AUTHENTICATED_INBOX_TTL_SECONDS
+        : ANONYMOUS_INBOX_TTL_SECONDS;
+      const newInbox = await api.createInbox({ ttlSeconds });
       setInboxList(addStoredInbox(newInbox));
       navigate(`/dashboard/${newInbox.id}`);
       setMobileView("messages");
@@ -287,12 +298,12 @@ export function DashboardPage() {
         <div className="space-y-4">
           <div className="space-y-1.5 pr-6">
             <h2 className="text-lg font-semibold tracking-tight">
-              One inbox limit reached
+              Inbox limit reached
             </h2>
             <p className="text-sm text-muted-foreground">
-              Anonymous users are limited to {ANONYMOUS_INBOX_LIMIT} active
-              inbox at a time. Delete your current inbox to create a new one, or
-              sign in to unlock multiple inboxes and longer retention.
+              Your current plan is limited to {ANONYMOUS_INBOX_LIMIT} active
+              inbox. Delete your current inbox to create a new one, or log in to
+              get up to {FREE_TIER_INBOX_LIMIT} mailboxes.
             </p>
           </div>
 
@@ -306,21 +317,21 @@ export function DashboardPage() {
 
           <div className="flex flex-col gap-2">
             <button
-              onClick={handleDeleteAndCreate}
-              className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
-            >
-              <Trash2 className="h-4 w-4" />
-              Delete current & create new
-            </button>
-            <button
               onClick={() => {
                 setShowInboxLimitModal(false);
                 navigate("/auth");
               }}
-              className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent active:scale-[0.98]"
+              className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
             >
               <LogIn className="h-4 w-4" />
               Log in / Register
+            </button>
+            <button
+              onClick={handleDeleteAndCreate}
+              className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent active:scale-[0.98]"
+            >
+              <Trash2 className="h-4 w-4" />
+              Delete current & create new
             </button>
           </div>
         </div>
