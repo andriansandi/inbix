@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
+import { Section } from "../components/Section";
 
 export function HomePage() {
   return (
@@ -125,7 +126,7 @@ export function HomePage() {
       </section>
 
       {/* Pillars - asymmetric grid */}
-      <section id="features" className="border-t border-border">
+      <Section id="features" className="border-t border-border">
         <div className="mx-auto max-w-6xl px-6 py-24 md:px-8">
           <h2 className="max-w-lg text-3xl font-bold tracking-tight md:text-4xl">
             Built for developers, not for email.
@@ -172,10 +173,10 @@ export function HomePage() {
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Architecture */}
-      <section id="architecture" className="border-t border-border bg-card/50">
+      <Section id="architecture" className="border-t border-border bg-card/50">
         <div className="mx-auto max-w-6xl px-6 py-24 md:px-8">
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
             One Worker. Everything included.
@@ -220,10 +221,10 @@ export function HomePage() {
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Quick start */}
-      <section id="deploy" className="border-t border-border">
+      <Section id="deploy" className="border-t border-border">
         <div className="mx-auto max-w-6xl px-6 py-24 md:px-8">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
             <div>
@@ -285,10 +286,10 @@ export function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* CTA */}
-      <section className="border-t border-border bg-card/50">
+      <Section className="border-t border-border bg-card/50">
         <div className="mx-auto max-w-6xl px-6 py-24 md:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
@@ -314,7 +315,7 @@ export function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
 
       <Footer />
     </div>

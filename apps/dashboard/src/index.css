@@ -96,6 +96,10 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
   .animate-in {
     animation: inbix-enter 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
