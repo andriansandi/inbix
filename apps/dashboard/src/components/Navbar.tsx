@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight, LayoutGrid } from "lucide-react";
 import { UserButton, SignedIn, SignedOut } from "@clerk/clerk-react";
 import { LogoMark } from "@inbix/ui";
 import { ThemeToggle } from "./ThemeToggle";
@@ -72,7 +72,7 @@ export function Navbar() {
             className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
             aria-label="Open Dashboard"
           >
-            <ArrowRight className="h-4 w-4" />
+            <LayoutGrid className="h-4 w-4" />
           </Link>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
