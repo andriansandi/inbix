@@ -38,6 +38,22 @@
     }
   ],
 
+  "durable_objects": {
+    "bindings": [
+      {
+        "class_name": "RealtimeRoom",
+        "name": "REALTIME_ROOM"
+      }
+    ]
+  },
+
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["RealtimeRoom"]
+    }
+  ],
+
   "vars": {
     "ENVIRONMENT": "production",
     "APP_DOMAIN": "inbix.xyz",

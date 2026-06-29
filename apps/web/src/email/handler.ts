@@ -98,6 +98,35 @@ export async function handleEmail(
     })
   );
 
+  ctx.waitUntil(
+    (async () => {
+      const roomId = env.REALTIME_ROOM.idFromName(inbox.id);
+      const room = env.REALTIME_ROOM.get(roomId);
+      await room.fetch(
+        new Request("https://realtime/broadcast", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: "message",
+            data: {
+              id: msgRecord.id,
+              inboxId: inbox.id,
+              fromAddress: msgRecord.fromAddress,
+              fromName: msgRecord.fromName,
+              subject: msgRecord.subject,
+              hasAttachments: parsed.attachments.length > 0,
+              size: msgRecord.size,
+              receivedAt: msgRecord.receivedAt,
+              isRead: false,
+            },
+          }),
+        })
+      );
+    })().catch((err) => {
+      console.warn(`[email] WebSocket broadcast failed:`, err);
+    })
+  );
+
   if (inbox.userId) {
     ctx.waitUntil(
       triggerWebhooks(env, inbox.userId, "message.received", {

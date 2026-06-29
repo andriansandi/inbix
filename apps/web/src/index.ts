@@ -3,6 +3,8 @@ import { handleEmail } from "./email/handler";
 import { cleanupExpiredData } from "./lib/cleanup";
 import type { HonoEnv, EmailEnv } from "./lib/env";
 
+export { RealtimeRoom } from "./durableObjects/RealtimeRoom";
+
 const app = createApp();
 
 async function withClerkKey(response: Response, key: string): Promise<Response> {

@@ -223,3 +223,27 @@ inboxRoutes.get("/:id/events", (c) => {
     });
   });
 });
+
+inboxRoutes.get("/:id/ws", async (c) => {
+  const id = c.req.param("id");
+  const upgrade = c.req.header("Upgrade");
+
+  if (!upgrade || upgrade.toLowerCase() !== "websocket") {
+    return errorResponse("WebSocket upgrade required", 426);
+  }
+
+  const db = createDatabase(c.env.DB);
+  const inbox = await getInbox(db, id);
+
+  if (!inbox || !inbox.isActive) {
+    return errorResponse("Inbox not found", 404);
+  }
+
+  if (inbox.expiresAt < Date.now()) {
+    return errorResponse("Inbox has expired", 410);
+  }
+
+  const roomId = c.env.REALTIME_ROOM.idFromName(id);
+  const room = c.env.REALTIME_ROOM.get(roomId);
+  return room.fetch(c.req.raw);
+});

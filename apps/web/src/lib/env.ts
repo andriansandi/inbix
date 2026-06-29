@@ -13,6 +13,7 @@ export type HonoEnv = {
     VAPID_PUBLIC_KEY: string;
     VAPID_PRIVATE_KEY: string;
     VAPID_SUBJECT: string;
+    REALTIME_ROOM: DurableObjectNamespace;
   };
   Variables: {
     requestId: string;
@@ -31,5 +32,6 @@ export type EmailEnv = {
     VAPID_PUBLIC_KEY: string;
     VAPID_PRIVATE_KEY: string;
     VAPID_SUBJECT: string;
+    REALTIME_ROOM: DurableObjectNamespace;
   };
 };
