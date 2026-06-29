@@ -35,9 +35,9 @@ export function Footer() {
               <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 Resources
               </span>
-              <a href="/#docs" className="text-sm text-muted-foreground hover:text-foreground">
+              <Link to="/docs" className="text-sm text-muted-foreground hover:text-foreground">
                 Documentation
-              </a>
+              </Link>
               <a href="/#architecture" className="text-sm text-muted-foreground hover:text-foreground">
                 Architecture
               </a>

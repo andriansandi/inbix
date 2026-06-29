@@ -4,99 +4,103 @@ import { Menu, X, LayoutGrid, Inbox } from "lucide-react";
 import { UserButton, SignedIn, SignedOut } from "@clerk/clerk-react";
 import { LogoMark } from "@inbix/ui";
 import { ThemeToggle } from "./ThemeToggle";
+import { ChangelogTopbar } from "./ChangelogTopbar";
 
 const navLinks = [
   { label: "Features", href: "/#features" },
   { label: "Pricing", to: "/pricing" },
-  { label: "Docs", href: "/#docs" },
+  { label: "Docs", to: "/docs" },
 ];
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 md:px-8">
-        <Link to="/" className="flex items-center gap-2.5">
-          <LogoMark size={28} />
-          <span className="text-base font-semibold tracking-tight">Inbix</span>
-        </Link>
+    <header className="sticky top-0 z-50">
+      <ChangelogTopbar />
+      <div className="border-b border-border bg-background/80 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 md:px-8">
+          <Link to="/" className="flex items-center gap-2.5">
+            <LogoMark size={28} />
+            <span className="text-base font-semibold tracking-tight">Inbix</span>
+          </Link>
 
-        <nav className="hidden items-center gap-6 lg:flex">
-          {navLinks.map((link) =>
-            link.to ? (
+          <nav className="hidden items-center gap-6 lg:flex">
+            {navLinks.map((link) =>
+              link.to ? (
+                <Link
+                  key={link.label}
+                  to={link.to}
+                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {link.label}
+                </a>
+              )
+            )}
+            <a
+              href="https://github.com/andriansandi/inbix"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              GitHub
+            </a>
+          </nav>
+
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <SignedOut>
               <Link
-                key={link.label}
-                to={link.to}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                to="/sign-in"
+                className="hidden text-sm text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
               >
-                {link.label}
+                Sign In
               </Link>
-            ) : (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            </SignedOut>
+            <SignedIn>
+              <div className="hidden sm:block">
+                <UserButton afterSignOutUrl="/" />
+              </div>
+            </SignedIn>
+            <SignedOut>
+              <Link
+                to="/dashboard"
+                className="hidden items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98] sm:inline-flex"
               >
-                {link.label}
-              </a>
-            )
-          )}
-          <a
-            href="https://github.com/andriansandi/inbix"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            GitHub
-          </a>
-        </nav>
-
-        <div className="flex items-center gap-4">
-          <ThemeToggle />
-          <SignedOut>
-            <Link
-              to="/sign-in"
-              className="hidden text-sm text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+                <Inbox className="h-4 w-4" />
+                Get Your Inbox
+              </Link>
+            </SignedOut>
+            <SignedIn>
+              <Link
+                to="/dashboard"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
+                aria-label="Dashboard"
+              >
+                <LayoutGrid className="h-4 w-4" />
+              </Link>
+            </SignedIn>
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground lg:hidden"
+              aria-label="Toggle menu"
             >
-              Sign In
-            </Link>
-          </SignedOut>
-          <SignedIn>
-            <div className="hidden sm:block">
-              <UserButton afterSignOutUrl="/" />
-            </div>
-          </SignedIn>
-          <SignedOut>
-            <Link
-              to="/dashboard"
-              className="hidden items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98] sm:inline-flex"
-            >
-              <Inbox className="h-4 w-4" />
-              Get Your Inbox
-            </Link>
-          </SignedOut>
-          <SignedIn>
-            <Link
-              to="/dashboard"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
-              aria-label="Dashboard"
-            >
-              <LayoutGrid className="h-4 w-4" />
-            </Link>
-          </SignedIn>
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground lg:hidden"
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
       </div>
 
       {menuOpen && (
-        <div className="border-t border-border lg:hidden">
+        <div className="border-b border-border bg-background lg:hidden">
           <nav className="flex flex-col gap-1 px-6 py-4">
             {navLinks.map((link) =>
               link.to ? (

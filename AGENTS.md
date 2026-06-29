@@ -29,6 +29,7 @@ npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/da
 npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/database/migrations/0002_add_user_id.sql
 npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/database/migrations/0003_add_missing_tables.sql
 npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/database/migrations/0004_notifications.sql
+npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/database/migrations/0005_v02_api_and_automation.sql
 npx wrangler d1 execute inbix --local --config wrangler.jsonc --command="INSERT OR IGNORE INTO domains (id, domain, is_default, is_verified, created_at) VALUES ('domain_inbix_xyz', 'inbix.xyz', 1, 1, strftime('%s','now')*1000)"
 ```
 
@@ -46,9 +47,13 @@ npx wrangler d1 execute inbix --local --config wrangler.jsonc --command="INSERT 
 
 - All changes via PR: branch from `origin/main` → push → `gh pr create --base main`
 - User merges via GitHub UI
-- After merge: `git checkout main && git pull && pnpm deploy`
+- After merge: `git checkout main && git pull`
+- Deployment is done via GitHub (CI/CD), NOT manual `wrangler deploy`
 - User communicates in Indonesian; respond in same language
+- **At the start of every session: run `pnpm dev` locally to ensure web + API are running before starting any work**
 - Run `pnpm typecheck` before PR
+- **Before commit and PR: run `pnpm dev` locally for manual review by the user**
+- **After completing all todos: ask the user for approval to review. Only create PR after the user approves.**
 - `pnpm lint` may fail (eslint not installed) — skip if needed
 - `pnpm install` may fail with `ERR_PNPM_IGNORED_BUILDS` — run again
 - Restore `apps/web/public/.gitkeep` after builds (`git checkout -- apps/web/public/.gitkeep`)
@@ -57,18 +62,17 @@ npx wrangler d1 execute inbix --local --config wrangler.jsonc --command="INSERT 
 
 ## Production Deploy
 
+Deployment is handled via GitHub CI/CD. Do NOT run `wrangler deploy` manually.
+
 ```
 git checkout main && git pull
-pnpm --filter @inbix/dashboard build
-git checkout -- apps/web/public/.gitkeep
-npx wrangler deploy --config wrangler.jsonc
 ```
 
 ## Environment
 
 - **Production vars** (`wrangler.jsonc`): `ENVIRONMENT`, `APP_DOMAIN`, `CORS_ORIGIN`, `CLERK_PUBLISHABLE_KEY`, `VAPID_PUBLIC_KEY`, `VAPID_SUBJECT`
 - **Production secrets** (via `wrangler secret put`): `CLERK_SECRET_KEY`, `VAPID_PRIVATE_KEY`
-- Wrangler v3 (`3.114.17`), `nodejs_compat` flag set
+- Wrangler v4 (`4.105.0`), `nodejs_compat` flag set
 - Build runs WITHOUT `apps/dashboard/.env` in CI — Clerk key injected at runtime via Worker HTML injection
 
 ## Architecture
