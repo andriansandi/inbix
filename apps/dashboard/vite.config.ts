@@ -17,10 +17,10 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    port: 5173,
+    port: 5176,
     proxy: {
       "/api": {
-        target: "http://localhost:8787",
+        target: "http://localhost:8791",
         changeOrigin: true,
       },
     },

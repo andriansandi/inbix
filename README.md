@@ -42,6 +42,16 @@ That's it. You now have a working disposable email service running on Cloudflare
 - **Real-time updates**: New messages appear instantly via SSE
 - **REST API**: Full REST API for automation, CI/CD, and integrations
 - **TypeScript SDK**: Official SDK for JavaScript and TypeScript
+- **Clerk authentication**: Email, password, magic link, Google, GitHub, passkeys
+
+### Notification Platform (v0.4 Phase 1)
+
+- **Web Push notifications**: Browser push when new emails arrive (Web Push API + VAPID)
+- **In-app toast notifications**: Animated toasts at top-right when tab is visible
+- **Notification preferences**: Push enable/disable, quiet hours, notify on new message
+- **Multi-device support**: Subscribe multiple devices per account
+- **Push click navigation**: Click notification → land directly on the inbox
+- **Service Worker**: Handles push events and notification clicks
 
 ### Roadmap
 
@@ -51,8 +61,9 @@ That's it. You now have a working disposable email service running on Cloudflare
 - Full-text search across messages
 - Official SDKs (Python, Go, PHP, Java, C#)
 - MCP Server for AI agents (Claude, Cursor, Windsurf)
-- Clerk authentication and Stripe billing
+- Stripe billing (Free, Pro, Team, Enterprise)
 - Team workspaces and shared inboxes
+- Multi-channel notifications (FCM, APNs, Telegram, Slack, Discord)
 - Analytics and audit logs
 
 ## Architecture
@@ -101,17 +112,17 @@ inbix/
 │   │   ├── src/
 │   │   │   ├── index.ts    # Entry: fetch + email handlers
 │   │   │   ├── app.ts      # Hono app
-│   │   │   ├── routes/     # API routes
-│   │   │   ├── email/      # Email handler
-│   │   │   ├── middleware/ # CORS, rate limit, security headers
-│   │   │   └── lib/        # Cleanup, utilities
+│   │   │   ├── routes/     # API routes (inboxes, messages, push, notifications)
+│   │   │   ├── email/      # Email handler (triggers push notifications)
+│   │   │   ├── middleware/ # CORS, rate limit, security, auth
+│   │   │   └── lib/        # webPush, notify, cleanup, utilities
 │   │   ├── public/         # Dashboard build output
 │   │   └── wrangler.toml
 │   └── dashboard/          # React SPA (Vite + TailwindCSS + shadcn/ui)
 │       ├── src/
-│       │   ├── pages/      # Home, Dashboard, NotFound
-│       │   ├── components/ # MessageList, MessageViewer, etc.
-│       │   ├── hooks/      # useInbox (SSE polling)
+│       │   ├── pages/      # Home, Dashboard, Settings, Auth, NotFound
+│       │   ├── components/ # MessageList, ToastProvider, NotificationsTab, etc.
+│       │   ├── hooks/      # useInbox, useAuth, usePushNotifications
 │       │   └── lib/        # API client, utils
 │       └── vite.config.ts
 ├── packages/
@@ -143,6 +154,8 @@ inbix/
 | Realtime     | Server-Sent Events (SSE)           |
 | Frontend     | React 19 + Vite                     |
 | Styling      | TailwindCSS + shadcn/ui            |
+| Auth         | Clerk (email, Google, GitHub, passkeys) |
+| Notifications| Web Push (VAPID + RFC 8291)        |
 | Deployment   | Wrangler                            |
 | CI/CD        | GitHub Actions                      |
 | Package Manager | pnpm                            |
@@ -328,17 +341,35 @@ GET /api/health/db
 GET /api/health/r2
 ```
 
+### Push Notifications
+
+```http
+POST   /api/push/subscribe          # Subscribe to push (requires auth)
+DELETE /api/push/subscribe           # Unsubscribe (requires auth)
+GET    /api/push/subscriptions       # List active subscriptions (requires auth)
+GET    /api/push/vapid-public-key    # Get VAPID public key (requires auth)
+```
+
+### Notification Preferences
+
+```http
+GET   /api/notifications/preferences  # Get preferences (requires auth)
+PATCH /api/notifications/preferences  # Update preferences (requires auth)
+POST  /api/notifications/test         # Send test push (requires auth)
+```
+
 ## Development
 
 ```bash
 # Install dependencies
 pnpm install
 
-# Run dashboard dev server (with API proxy)
-pnpm --filter @inbix/dashboard dev
+# Start both Vite (:5176) + wrangler (:8791)
+pnpm dev
 
-# Run worker dev server
-pnpm --filter @inbix/web dev
+# Or run individually
+pnpm --filter @inbix/dashboard dev   # Vite at :5176
+pnpm --filter @inbix/web dev          # Wrangler at :8791
 
 # Type check all packages
 pnpm typecheck
@@ -379,23 +410,40 @@ const message = await client.getMessage(messages[0].id);
 
 ## Environment Variables
 
-### Worker (wrangler.toml `[vars]`)
+### Worker (wrangler.jsonc `[vars]`)
 
 | Variable        | Description                     | Default     |
 | --------------- | ------------------------------- | ----------- |
 | `ENVIRONMENT`   | Environment name                | `production`|
 | `APP_DOMAIN`    | Default domain for inboxes      | `inbix.xyz` |
 | `CORS_ORIGIN`   | Allowed CORS origins (comma-sep)| `https://inbix.xyz` |
+| `CLERK_PUBLISHABLE_KEY` | Clerk public key (frontend) | — |
+| `VAPID_PUBLIC_KEY` | Web Push public key (VAPID) | — |
+| `VAPID_SUBJECT` | Web Push contact (mailto:)  | `mailto:noreply@inbix.xyz` |
+
+### Worker Secrets (via `wrangler secret put`)
+
+| Secret          | Description                     |
+| --------------- | ------------------------------- |
+| `CLERK_SECRET_KEY` | Clerk backend secret key     |
+| `VAPID_PRIVATE_KEY` | Web Push private key (VAPID) |
 
 ### Local Development (.dev.vars)
 
-Copy `.dev.vars.example` to `.dev.vars` and fill in values:
+Copy `.dev.vars.example` to `.dev.vars` at the repo root and fill in values:
 
 ```
-APP_DOMAIN=localhost:8787
-CORS_ORIGIN=http://localhost:5173
+APP_DOMAIN=inbix.xyz
+CORS_ORIGIN=http://localhost:5176
 ENVIRONMENT=development
+CLERK_SECRET_KEY=sk_test_xxx
+CLERK_PUBLISHABLE_KEY=pk_test_xxx
+VAPID_PUBLIC_KEY=
+VAPID_PRIVATE_KEY=
+VAPID_SUBJECT=mailto:noreply@inbix.xyz
 ```
+
+Local dev runs Vite at `http://localhost:5176` and wrangler at `http://localhost:8791`.
 
 ## Database Schema
 
@@ -409,6 +457,9 @@ ENVIRONMENT=development
 | `api_keys`     | API keys for authentication              |
 | `domains`      | Supported domains                        |
 | `users`        | Users (optional, for admin dashboard)    |
+| `push_subscriptions` | Web Push subscription endpoints + keys |
+| `notification_preferences` | Push, quiet hours, notify settings |
+| `notification_logs` | Notification delivery audit trail  |
 
 ## Roadmap
 
@@ -421,6 +472,16 @@ ENVIRONMENT=development
 - [x] Auto expiration
 - [x] Real-time updates via SSE
 - [x] Dashboard UI
+- [x] Clerk authentication
+- [x] REST API + TypeScript SDK
+
+### v0.4 — Notification Platform (Phase 1)
+- [x] Web Push notifications (VAPID + RFC 8291)
+- [x] In-app toast notifications
+- [x] Notification preferences (quiet hours, notify on new message)
+- [x] Multi-device push subscription
+- [x] Push click → navigate to inbox
+- [x] Service Worker (push events + notification click)
 
 ### v0.2 — API & Automation
 - [ ] REST API with API key authentication
