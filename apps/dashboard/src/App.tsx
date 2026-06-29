@@ -7,10 +7,11 @@ import { SignInPage, SignUpPage } from "./pages/AuthPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { ScrollManager } from "./components/ScrollManager";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ToastProvider } from "./components/ToastProvider";
 
 export function App() {
   return (
-    <>
+    <ToastProvider>
       <ScrollManager />
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -23,6 +24,6 @@ export function App() {
         <Route path="/auth" element={<Navigate to="/sign-in" replace />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </>
+    </ToastProvider>
   );
 }

@@ -16,7 +16,27 @@ self.addEventListener("push", (event) => {
     requireInteraction: false,
   };
 
-  event.waitUntil(self.registration.showNotification(title, options));
+  event.waitUntil(
+    (async () => {
+      const allClients = await self.clients.matchAll({
+        type: "window",
+        includeUncontrolled: true,
+      });
+
+      const visibleClient = allClients.find(
+        (c) => c.visibilityState === "visible"
+      );
+
+      if (visibleClient) {
+        visibleClient.postMessage({
+          type: "PUSH_RECEIVED",
+          payload: data,
+        });
+      }
+
+      await self.registration.showNotification(title, options);
+    })()
+  );
 });
 
 self.addEventListener("notificationclick", (event) => {
@@ -24,21 +44,28 @@ self.addEventListener("notificationclick", (event) => {
   const targetUrl = event.notification.data?.url || "/";
 
   event.waitUntil(
-    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
-      for (const client of clientList) {
-        if (client.url.includes(targetUrl) && "focus" in client) {
-          return client.focus();
-        }
-      }
-      for (const client of clientList) {
+    (async () => {
+      const allClients = await self.clients.matchAll({
+        type: "window",
+        includeUncontrolled: true,
+      });
+
+      for (const client of allClients) {
         if ("focus" in client) {
+          const clientUrl = new URL(client.url);
+          const targetPath = new URL(targetUrl, self.location.origin).pathname;
+
+          if (clientUrl.pathname === targetPath) {
+            return client.focus();
+          }
           client.navigate(targetUrl);
           return client.focus();
         }
       }
+
       if (self.clients.openWindow) {
         return self.clients.openWindow(targetUrl);
       }
-    })
+    })()
   );
 });
