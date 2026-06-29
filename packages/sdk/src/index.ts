@@ -1,34 +1,116 @@
-import type {
-  Inbox,
-  Message,
-  MessageSummary,
-  Attachment,
-  ApiKey,
-  ApiKeyWithSecret,
-  Webhook,
-  WebhookDelivery,
-  ApiLog,
-  Domain,
-  PaginatedResponse,
-  ApiResponse,
-  CreateInboxOptions,
-} from "@inbix/shared";
+export interface Inbox {
+  id: string;
+  emailAddress: string;
+  domain: string;
+  userId: string | null;
+  createdAt: number;
+  expiresAt: number;
+  isActive: boolean;
+}
 
-export type {
-  Inbox,
-  Message,
-  MessageSummary,
-  Attachment,
-  ApiKey,
-  ApiKeyWithSecret,
-  Webhook,
-  WebhookDelivery,
-  ApiLog,
-  Domain,
-  PaginatedResponse,
-  ApiResponse,
-  CreateInboxOptions,
-};
+export interface MessageSummary {
+  id: string;
+  inboxId: string;
+  fromAddress: string;
+  fromName: string | null;
+  subject: string | null;
+  hasAttachments: boolean;
+  size: number;
+  receivedAt: number;
+  isRead: boolean;
+}
+
+export interface Message extends MessageSummary {
+  textContent: string | null;
+  htmlContent: string | null;
+  rawHeaders: string | null;
+}
+
+export interface Attachment {
+  id: string;
+  messageId: string;
+  filename: string;
+  contentType: string;
+  size: number;
+  contentId: string | null;
+  r2Key: string;
+}
+
+export interface ApiKey {
+  id: string;
+  name: string;
+  prefix: string;
+  createdAt: number;
+  lastUsedAt: number | null;
+}
+
+export interface ApiKeyWithSecret extends ApiKey {
+  key: string;
+}
+
+export interface Webhook {
+  id: string;
+  userId: string;
+  url: string;
+  events: string[];
+  secret: string;
+  isActive: boolean;
+  createdAt: number;
+}
+
+export interface WebhookDelivery {
+  id: string;
+  webhookId: string;
+  event: string;
+  payload: string;
+  status: "pending" | "delivered" | "failed";
+  responseCode: number | null;
+  responseBody: string | null;
+  attempts: number;
+  createdAt: number;
+}
+
+export interface ApiLog {
+  id: string;
+  apiKeyId: string | null;
+  userId: string | null;
+  method: string;
+  path: string;
+  status: number;
+  durationMs: number;
+  requestId: string | null;
+  createdAt: number;
+}
+
+export interface Domain {
+  id: string;
+  domain: string;
+  isDefault: boolean;
+  isVerified: boolean;
+  createdAt: number;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  message?: string;
+}
+
+export interface CreateInboxOptions {
+  domain?: string;
+  ttlSeconds?: number;
+}
 
 export type WebhookEvent =
   | "inbox.created"
