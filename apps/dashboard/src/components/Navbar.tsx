@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, LayoutGrid, Inbox } from "lucide-react";
-import { UserButton, SignedIn, SignedOut } from "@clerk/clerk-react";
+import { UserButton, SignedIn, SignedOut, useAuth, useClerk, useUser } from "@clerk/clerk-react";
 import { LogoMark } from "@inbix/ui";
 import { ThemeToggle } from "./ThemeToggle";
 import { ChangelogTopbar } from "./ChangelogTopbar";
@@ -14,6 +14,10 @@ const navLinks = [
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { isSignedIn } = useAuth();
+  const { signOut } = useClerk();
+  const { user } = useUser();
+  const displayName = user?.firstName || user?.primaryEmailAddress?.emailAddress;
 
   return (
     <header className="sticky top-0 z-50">
@@ -99,9 +103,50 @@ export function Navbar() {
         </div>
       </div>
 
-      {menuOpen && (
-        <div className="border-b border-border bg-background lg:hidden">
-          <nav className="flex flex-col gap-1 px-6 py-4">
+      <div
+        className={`overflow-hidden border-b border-border bg-background transition-all duration-300 ease-out lg:hidden ${
+          menuOpen ? "max-h-[600px] opacity-100" : "max-h-0 border-b-0 opacity-0"
+        }`}
+      >
+        <nav className="flex flex-col gap-1 px-6 py-4">
+            {isSignedIn && (
+              <div className="mb-2 flex items-center justify-between border-b border-border pb-3">
+                <div className="flex items-center gap-2">
+                  <UserButton afterSignOutUrl="/" />
+                  <span className="text-sm font-medium">Hi, {displayName ?? "there"}</span>
+                </div>
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    signOut(() => {
+                      window.location.href = "/";
+                    });
+                  }}
+                  className="rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
+            {!isSignedIn && (
+              <div className="mb-2 flex gap-2 border-b border-border pb-3">
+                <Link
+                  to="/sign-in"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex-1 rounded-lg border border-border px-4 py-2.5 text-center text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/dashboard"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground"
+                >
+                  <Inbox className="h-4 w-4" />
+                  Get Your Inbox
+                </Link>
+              </div>
+            )}
             {navLinks.map((link) =>
               link.to ? (
                 <Link
@@ -131,44 +176,8 @@ export function Navbar() {
             >
               GitHub
             </a>
-            <SignedOut>
-              <Link
-                to="/sign-in"
-                onClick={() => setMenuOpen(false)}
-                className="rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground"
-              >
-                Sign In
-              </Link>
-            </SignedOut>
-            <SignedIn>
-              <div className="flex items-center gap-2 rounded-lg px-3 py-2">
-                <UserButton afterSignOutUrl="/" />
-                <span className="text-sm text-muted-foreground">Account</span>
-              </div>
-            </SignedIn>
-            <SignedOut>
-              <Link
-                to="/dashboard"
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground"
-              >
-                <Inbox className="h-4 w-4" />
-                Get Your Inbox
-              </Link>
-            </SignedOut>
-            <SignedIn>
-              <Link
-                to="/dashboard"
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground"
-              >
-                <LayoutGrid className="h-4 w-4" />
-                Dashboard
-              </Link>
-            </SignedIn>
-          </nav>
-        </div>
-      )}
+        </nav>
+      </div>
     </header>
   );
 }

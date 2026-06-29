@@ -49,15 +49,15 @@ This document outlines the planned development milestones for Inbix.
 
 **Goal**: Production-ready API for automation and CI/CD.
 
-- [ ] API key authentication
-- [ ] Per-key rate limiting
+- [x] API key authentication
+- [x] Per-key rate limiting
 - [ ] Custom usernames (choose your own inbox address)
 - [ ] Multiple domains support (add/remove via API/dashboard)
-- [ ] TypeScript SDK published to npm
-- [ ] API documentation site (OpenAPI/Swagger)
-- [ ] Webhook for inbox creation
-- [ ] Inbox quota management
-- [ ] Request/response logging (opt-in)
+- [x] TypeScript SDK published to npm
+- [x] API documentation site (OpenAPI/Swagger)
+- [x] Webhook for inbox creation
+- [x] Inbox quota management
+- [x] Request/response logging (opt-in)
 - [ ] Integration test suite
 
 ### GitHub Issues for v0.2
