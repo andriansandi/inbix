@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev --config ../../wrangler.jsonc",
+    "dev": "wrangler dev --config ../../wrangler.jsonc --port 8791",
     "build": "wrangler deploy --dry-run --config ../../wrangler.jsonc",
     "deploy": "wrangler deploy --config ../../wrangler.jsonc",
     "typecheck": "tsc --noEmit",
