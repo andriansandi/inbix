@@ -21,6 +21,21 @@ import {
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { Section } from "../components/Section";
+import { motion } from "motion/react";
+
+const techStack = [
+  { name: "Cloudflare Workers", slug: "cloudflare" },
+  { name: "Hono", slug: "hono" },
+  { name: "TypeScript", slug: "typescript" },
+  { name: "D1", slug: "cloudflare" },
+  { name: "R2", slug: "cloudflare" },
+  { name: "KV", slug: "cloudflare" },
+  { name: "Drizzle ORM", slug: "drizzle" },
+  { name: "Zod", slug: "zod" },
+  { name: "React", slug: "react" },
+  { name: "Vite", slug: "vite" },
+  { name: "TailwindCSS", slug: "tailwindcss" },
+];
 
 export function HomePage() {
   return (
@@ -210,15 +225,31 @@ export function HomePage() {
             ))}
           </div>
 
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
-            {["Cloudflare Workers", "Hono", "TypeScript", "D1", "R2", "KV", "Drizzle ORM", "Zod", "React", "Vite", "TailwindCSS"].map((tech) => (
-              <span
-                key={tech}
-                className="rounded-lg border border-border bg-background px-3 py-1.5 text-sm font-medium"
-              >
-                {tech}
-              </span>
-            ))}
+          <div className="mt-12 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+            <motion.div
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+              className="flex w-max gap-3"
+            >
+              {[...techStack, ...techStack].map((tech, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2"
+                >
+                  <img
+                    src={`https://cdn.simpleicons.org/${tech.slug}`}
+                    alt={tech.name}
+                    width={20}
+                    height={20}
+                    className="h-5 w-5 shrink-0"
+                    loading="lazy"
+                  />
+                  <span className="whitespace-nowrap text-sm font-medium">
+                    {tech.name}
+                  </span>
+                </div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </Section>
