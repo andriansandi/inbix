@@ -15,8 +15,7 @@ const spec = {
     contact: { url: "https://inbix.xyz" },
   },
   servers: [
-    { url: "https://inbix.xyz", description: "Production" },
-    { url: "http://localhost:8791", description: "Local development" },
+    { url: "/", description: "Current server" },
   ],
   components: {
     securitySchemes: {
@@ -530,6 +529,9 @@ openapiRoutes.get("/docs/ui", () => {
 </body>
 </html>`;
   return new Response(html, {
-    headers: { "Content-Type": "text/html; charset=utf-8" },
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+      "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' https://cdn.jsdelivr.net; connect-src 'self';",
+    },
   });
 });
