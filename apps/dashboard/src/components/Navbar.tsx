@@ -69,10 +69,10 @@ export function Navbar() {
           </SignedIn>
           <Link
             to="/dashboard"
-            className="hidden items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98] sm:inline-flex"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
+            aria-label="Open Dashboard"
           >
-            Open Dashboard
-            <ArrowRight className="h-3.5 w-3.5" />
+            <ArrowRight className="h-4 w-4" />
           </Link>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
@@ -134,9 +134,9 @@ export function Navbar() {
             <Link
               to="/dashboard"
               onClick={() => setMenuOpen(false)}
-              className="mt-2 flex items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground"
+              className="flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground"
             >
-              Open Dashboard
+              Dashboard
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </nav>
