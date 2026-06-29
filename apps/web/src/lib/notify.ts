@@ -50,7 +50,7 @@ export async function notifyNewMessage(
   const payload = {
     title,
     body,
-    url: `/dashboard?inbox=${inbox.id}`,
+    url: `/dashboard/${inbox.id}`,
     timestamp: Date.now(),
   };
 
