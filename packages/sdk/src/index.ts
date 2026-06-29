@@ -282,6 +282,41 @@ export class InbixClient {
     };
   }
 
+  subscribeToInboxWS(
+    inboxId: string,
+    onMessage: (message: MessageSummary) => void,
+    onError?: (error: Event) => void
+  ): () => void {
+    const wsUrl = this.baseUrl.replace(/^http/, "ws") + `/api/inboxes/${inboxId}/ws`;
+    const ws = new WebSocket(wsUrl);
+
+    ws.onmessage = (event) => {
+      try {
+        const msg = JSON.parse(event.data as string);
+        if (msg.type === "message") {
+          onMessage(msg.data as MessageSummary);
+        }
+      } catch {
+        // ignore
+      }
+    };
+
+    ws.onerror = (event) => {
+      onError?.(event);
+    };
+
+    const pingInterval = setInterval(() => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send("ping");
+      }
+    }, 30000);
+
+    return () => {
+      clearInterval(pingInterval);
+      ws.close();
+    };
+  }
+
   async createApiKey(name: string): Promise<ApiKeyWithSecret> {
     return this.request<ApiKeyWithSecret>("POST", "/api/keys", { name });
   }

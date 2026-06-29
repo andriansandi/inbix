@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { Inbox, MessageSummary } from "@inbix/shared";
 import { api } from "../lib/api";
 
@@ -7,7 +7,6 @@ export function useInbox(inboxId: string | null) {
   const [messages, setMessages] = useState<MessageSummary[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const eventSourceRef = useRef<EventSource | null>(null);
 
   const fetchInbox = useCallback(async () => {
     if (!inboxId) return;
@@ -42,32 +41,76 @@ export function useInbox(inboxId: string | null) {
   useEffect(() => {
     if (!inboxId) return;
 
-    const eventSource = new EventSource(`/api/inboxes/${inboxId}/events`);
-    eventSourceRef.current = eventSource;
+    let ws: WebSocket | null = null;
+    let eventSource: EventSource | null = null;
+    let pingInterval: ReturnType<typeof setInterval> | null = null;
+    let sseStarted = false;
+    let cleanedUp = false;
 
-    eventSource.addEventListener("message", (event) => {
+    const handleMessage = (data: MessageSummary) => {
+      setMessages((prev) => {
+        if (prev.some((m) => m.id === data.id)) return prev;
+        return [data, ...prev];
+      });
+    };
+
+    const handleExpired = () => {
+      setInbox((prev) => (prev ? { ...prev, expiresAt: 0 } : null));
+    };
+
+    const startSSE = () => {
+      if (sseStarted || cleanedUp) return;
+      sseStarted = true;
+      eventSource = new EventSource(`/api/inboxes/${inboxId}/events`);
+      eventSource.addEventListener("message", (event) => {
+        try {
+          handleMessage(JSON.parse(event.data) as MessageSummary);
+        } catch {
+          // ignore
+        }
+      });
+      eventSource.addEventListener("inbox_expired", () => {
+        handleExpired();
+      });
+      eventSource.onerror = () => {
+        eventSource?.close();
+      };
+    };
+
+    const wsUrl = `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${window.location.host}/api/inboxes/${inboxId}/ws`;
+    ws = new WebSocket(wsUrl);
+
+    ws.onopen = () => {
+      pingInterval = setInterval(() => {
+        if (ws?.readyState === WebSocket.OPEN) {
+          ws.send("ping");
+        }
+      }, 30000);
+    };
+
+    ws.onmessage = (event) => {
       try {
-        const msg = JSON.parse(event.data) as MessageSummary;
-        setMessages((prev) => {
-          if (prev.some((m) => m.id === msg.id)) return prev;
-          return [msg, ...prev];
-        });
+        const msg = JSON.parse(event.data);
+        if (msg.type === "message") {
+          handleMessage(msg.data as MessageSummary);
+        } else if (msg.type === "inbox_expired") {
+          handleExpired();
+        }
       } catch {
         // ignore
       }
-    });
+    };
 
-    eventSource.addEventListener("inbox_expired", () => {
-      setInbox((prev) => (prev ? { ...prev, expiresAt: 0 } : null));
-    });
-
-    eventSource.onerror = () => {
-      eventSource.close();
+    ws.onclose = () => {
+      if (pingInterval) clearInterval(pingInterval);
+      startSSE();
     };
 
     return () => {
-      eventSource.close();
-      eventSourceRef.current = null;
+      cleanedUp = true;
+      if (pingInterval) clearInterval(pingInterval);
+      ws?.close();
+      eventSource?.close();
     };
   }, [inboxId]);
 

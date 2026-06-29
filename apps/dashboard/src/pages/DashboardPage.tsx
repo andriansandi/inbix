@@ -176,11 +176,19 @@ export function DashboardPage() {
             ) : (
               <div className="divide-y divide-border">
                 {inboxList.map((box) => (
-                  <button
+                  <div
                     key={box.id}
                     onClick={() => handleSelectInbox(box.id)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleSelectInbox(box.id);
+                      }
+                    }}
                     className={cn(
-                      "group flex w-full flex-col gap-1.5 px-4 py-3 text-left transition-colors hover:bg-accent/50",
+                      "group flex w-full cursor-pointer flex-col gap-1.5 px-4 py-3 text-left transition-colors hover:bg-accent/50",
                       currentInboxId === box.id && "bg-accent"
                     )}
                   >
@@ -200,7 +208,7 @@ export function DashboardPage() {
                       </span>
                       <ExpiryTimer expiresAt={box.expiresAt} />
                     </div>
-                  </button>
+                  </div>
                 ))}
               </div>
             )}

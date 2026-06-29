@@ -2,7 +2,7 @@
 
 This document outlines the planned development milestones for Inbix.
 
-## v0.1 — MVP (Current)
+## v0.1 — MVP (Complete)
 
 **Goal**: A working disposable email service with a dashboard.
 
@@ -51,7 +51,7 @@ This document outlines the planned development milestones for Inbix.
 
 - [x] API key authentication
 - [x] Per-key rate limiting
-- [ ] WebSocket support (realtime alternative to SSE)
+- [x] WebSocket support (realtime alternative to SSE)
 - [x] TypeScript SDK published to npm
 - [x] API documentation site (OpenAPI/Swagger)
 - [x] Webhook for inbox creation
@@ -80,7 +80,7 @@ This document outlines the planned development milestones for Inbix.
 - [ ] Export inbox (JSON, EML)
 - [x] Dark/light mode toggle
 - [ ] Keyboard shortcuts
-- [ ] Durable Objects for real-time (if SSE proves insufficient)
+- [x] Durable Objects for real-time (if SSE proves insufficient)
 
 ### GitHub Issues for v0.3
 - #21 Implement message webhooks
