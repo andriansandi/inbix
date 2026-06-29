@@ -47,27 +47,22 @@ This document outlines the planned development milestones for Inbix.
 
 ## v0.2 — API & Automation
 
-**Goal**: Production-ready API for automation and CI/CD.
+**Goal**: Production-ready API for automation and CI/CD with realtime support.
 
 - [x] API key authentication
 - [x] Per-key rate limiting
-- [ ] Custom usernames (choose your own inbox address)
-- [ ] Multiple domains support (add/remove via API/dashboard)
+- [ ] WebSocket support (realtime alternative to SSE)
 - [x] TypeScript SDK published to npm
 - [x] API documentation site (OpenAPI/Swagger)
 - [x] Webhook for inbox creation
 - [x] Inbox quota management
 - [x] Request/response logging (opt-in)
-- [ ] Integration test suite
 
 ### GitHub Issues for v0.2
 - #13 Implement API key generation and authentication
 - #14 Add per-key rate limiting
-- #15 Support custom usernames
-- #16 Add multi-domain management UI
 - #17 Publish @inbix/sdk to npm
 - #18 Generate OpenAPI spec
-- #19 Set up integration tests with Vitest
 - #20 Add webhook support for inbox events
 
 ---
@@ -76,23 +71,20 @@ This document outlines the planned development milestones for Inbix.
 
 **Goal**: Advanced features for power users.
 
-- [ ] Webhooks for new messages
+- [x] Webhooks for new messages
 - [ ] Full-text search across messages
-- [ ] Email forwarding (redirect to real inbox)
 - [ ] Spam protection (header analysis, content scoring)
 - [ ] Custom TTL per inbox (fine-grained)
 - [ ] Inbox pinning (prevent auto-expiry)
 - [ ] Message starring/favorites
 - [ ] Export inbox (JSON, EML)
-- [ ] Dark/light mode toggle
+- [x] Dark/light mode toggle
 - [ ] Keyboard shortcuts
-- [ ] WebSocket support (alternative to SSE)
 - [ ] Durable Objects for real-time (if SSE proves insufficient)
 
 ### GitHub Issues for v0.3
 - #21 Implement message webhooks
 - #22 Add full-text search with FTS5
-- #23 Email forwarding support
 - #24 Spam protection heuristics
 - #25 Inbox pinning and custom TTL
 - #26 Message export (JSON, EML)
@@ -269,6 +261,9 @@ platform relies on the standard Web Push protocol.
 
 **Goal**: Enterprise-ready, multi-tenant platform.
 
+- [ ] Custom usernames (choose your own inbox address)
+- [ ] Multiple domains support (add/remove via API/dashboard)
+- [ ] Integration test suite
 - [ ] Admin dashboard with metrics
 - [ ] Analytics (inbox creation, message volume, popular domains)
 - [ ] Multi-tenant support (organizations, teams)
@@ -286,6 +281,9 @@ platform relies on the standard Web Push protocol.
 - [ ] Performance benchmarks and optimization
 
 ### GitHub Issues for v1.0
+- #15 Support custom usernames
+- #16 Add multi-domain management UI
+- #19 Set up integration tests with Vitest
 - #29 Admin dashboard with analytics
 - #30 Multi-tenant architecture
 - #31 User authentication system
