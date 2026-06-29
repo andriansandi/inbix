@@ -68,3 +68,4 @@ export const users = sqliteTable("users", {
 });
 
 export * from "./notifications";
+export * from "./v02";

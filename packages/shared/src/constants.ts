@@ -40,3 +40,25 @@ export const CORS_ALLOWED_ORIGINS = ["https://inbix.xyz", "http://localhost:5173
 export const PUSH_TTL_SECONDS = 24 * 60 * 60;
 export const PUSH_MAX_SUBSCRIPTIONS_PER_USER = 10;
 export const PUSH_PAYLOAD_MAX_BYTES = 4 * 1024;
+
+export const API_KEY_RATE_LIMIT = {
+  WINDOW_SECONDS: 60,
+  MAX_REQUESTS: 120,
+};
+
+export const WEBHOOK_DELIVERY_TIMEOUT_MS = 10_000;
+export const WEBHOOK_MAX_PER_USER = 10;
+export const WEBHOOK_DELIVERY_MAX_ATTEMPTS = 3;
+
+export const WEBHOOK_EVENTS = [
+  "inbox.created",
+  "inbox.deleted",
+  "message.received",
+  "message.deleted",
+] as const;
+
+export const API_LOG_RETENTION_DAYS = 7;
+export const API_LOG_BATCH_SIZE = 100;
+
+export const PRO_TIER_INBOX_LIMIT = Infinity;
+export const API_KEY_INBOX_LIMIT = 50;

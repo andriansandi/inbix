@@ -8,6 +8,7 @@ import {
   ANONYMOUS_INBOX_TTL_SECONDS,
   AUTHENTICATED_INBOX_TTL_SECONDS,
   FREE_TIER_INBOX_LIMIT,
+  API_KEY_INBOX_LIMIT,
   generateId,
 } from "@inbix/shared";
 import {
@@ -22,6 +23,7 @@ import {
 } from "@inbix/database";
 import { streamSSE } from "hono/streaming";
 import { SSE_HEARTBEAT_MS } from "@inbix/shared";
+import { triggerWebhooks } from "../lib/webhook";
 
 export const inboxRoutes = new Hono<HonoEnv>();
 
@@ -35,12 +37,17 @@ inboxRoutes.post("/", async (c) => {
 
   const { domain, ttlSeconds } = parsed.data;
   const userId = c.get("userId");
+  const authMethod = c.get("authMethod");
   const db = createDatabase(c.env.DB);
 
   if (userId) {
     const userInboxCount = await countInboxesByUser(db, userId);
-    if (userInboxCount >= FREE_TIER_INBOX_LIMIT) {
-      return errorResponse(`Inbox limit reached (${FREE_TIER_INBOX_LIMIT} max for free tier)`, 403);
+    const limit = authMethod === "apikey" ? API_KEY_INBOX_LIMIT : FREE_TIER_INBOX_LIMIT;
+    if (userInboxCount >= limit) {
+      return errorResponse(
+        `Inbox limit reached (${limit === Infinity ? "unlimited" : limit} max)`,
+        403
+      );
     }
   }
 
@@ -63,6 +70,12 @@ inboxRoutes.post("/", async (c) => {
     inbox.id,
     { expirationTtl: ttl }
   );
+
+  if (userId) {
+    c.executionCtx.waitUntil(
+      triggerWebhooks(c.env, userId, "inbox.created", inbox).catch(() => {})
+    );
+  }
 
   return json({ success: true, data: inbox }, 201);
 });
@@ -112,6 +125,7 @@ inboxRoutes.get("/:id", async (c) => {
 
 inboxRoutes.delete("/:id", async (c) => {
   const id = c.req.param("id");
+  const userId = c.get("userId");
   const db = createDatabase(c.env.DB);
   const inbox = await getInbox(db, id);
 
@@ -121,6 +135,12 @@ inboxRoutes.delete("/:id", async (c) => {
 
   await deleteInbox(db, id);
   await c.env.CACHE.delete(`inbox:${inbox.emailAddress}`);
+
+  if (userId) {
+    c.executionCtx.waitUntil(
+      triggerWebhooks(c.env, userId, "inbox.deleted", { id: inbox.id, emailAddress: inbox.emailAddress }).catch(() => {})
+    );
+  }
 
   return json({ success: true, message: "Inbox deleted" });
 });

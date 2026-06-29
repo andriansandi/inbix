@@ -6,6 +6,7 @@ import { errorHandler, notFoundHandler } from "./middleware/error";
 import { rateLimit } from "./middleware/rateLimit";
 import { securityHeaders } from "./middleware/securityHeaders";
 import { authMiddleware } from "./middleware/auth";
+import { apiLogger } from "./middleware/apiLogger";
 import type { HonoEnv } from "./lib/env";
 import { inboxRoutes } from "./routes/inboxes";
 import { messageRoutes } from "./routes/messages";
@@ -13,6 +14,10 @@ import { healthRoutes } from "./routes/health";
 import { domainRoutes } from "./routes/domains";
 import { pushRoutes } from "./routes/push";
 import { notificationRoutes } from "./routes/notifications";
+import { apiKeyRoutes } from "./routes/apiKeys";
+import { webhookRoutes } from "./routes/webhooks";
+import { apiLogRoutes } from "./routes/apiLogs";
+import { openapiRoutes } from "./routes/openapi";
 
 export function createApp() {
   const app = new Hono<HonoEnv>();
@@ -39,6 +44,7 @@ export function createApp() {
 
   app.use("/api/*", authMiddleware);
   app.use("/api/*", rateLimit);
+  app.use("/api/*", apiLogger);
 
   app.route("/api", healthRoutes);
   app.route("/api/inboxes", inboxRoutes);
@@ -46,6 +52,10 @@ export function createApp() {
   app.route("/api/domains", domainRoutes);
   app.route("/api/push", pushRoutes);
   app.route("/api/notifications", notificationRoutes);
+  app.route("/api/keys", apiKeyRoutes);
+  app.route("/api/webhooks", webhookRoutes);
+  app.route("/api/logs", apiLogRoutes);
+  app.route("/api", openapiRoutes);
 
   app.notFound(notFoundHandler);
   app.onError(errorHandler);

@@ -41,6 +41,50 @@ export interface ApiKey {
   lastUsedAt: number | null;
 }
 
+export interface ApiKeyWithSecret extends ApiKey {
+  key: string;
+}
+
+export interface Webhook {
+  id: string;
+  userId: string;
+  url: string;
+  events: string[];
+  secret: string;
+  isActive: boolean;
+  createdAt: number;
+}
+
+export interface WebhookDelivery {
+  id: string;
+  webhookId: string;
+  event: string;
+  payload: string;
+  status: "pending" | "delivered" | "failed";
+  responseCode: number | null;
+  responseBody: string | null;
+  attempts: number;
+  createdAt: number;
+}
+
+export interface ApiLog {
+  id: string;
+  apiKeyId: string | null;
+  userId: string | null;
+  method: string;
+  path: string;
+  status: number;
+  durationMs: number;
+  requestId: string | null;
+  createdAt: number;
+}
+
+export type WebhookEvent =
+  | "inbox.created"
+  | "inbox.deleted"
+  | "message.received"
+  | "message.deleted";
+
 export interface Domain {
   id: string;
   domain: string;
