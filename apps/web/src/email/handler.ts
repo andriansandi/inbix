@@ -9,6 +9,7 @@ import {
 } from "@inbix/database";
 import { sanitizeFilename } from "@inbix/shared";
 import { notifyNewMessage } from "../lib/notify";
+import { triggerWebhooks } from "../lib/webhook";
 
 export async function handleEmail(
   message: ForwardableEmailMessage,
@@ -96,4 +97,20 @@ export async function handleEmail(
       console.warn(`[email] Push notification failed:`, err);
     })
   );
+
+  if (inbox.userId) {
+    ctx.waitUntil(
+      triggerWebhooks(env, inbox.userId, "message.received", {
+        id: msgRecord.id,
+        inboxId: inbox.id,
+        fromAddress: msgRecord.fromAddress,
+        fromName: msgRecord.fromName,
+        subject: msgRecord.subject,
+        hasAttachments: parsed.attachments.length > 0,
+        receivedAt: msgRecord.receivedAt,
+      }).catch((err) => {
+        console.warn(`[email] Webhook delivery failed:`, err);
+      })
+    );
+  }
 }

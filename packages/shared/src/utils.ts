@@ -27,6 +27,18 @@ export function generateApiKey(): string {
   return `inbix_${hex}`;
 }
 
+export function generateWebhookSecret(): string {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+export function getApiKeyPrefix(key: string): string {
+  return key.slice(0, 12);
+}
+
 export function generateRequestToken(): string {
   const bytes = new Uint8Array(32);
   crypto.getRandomValues(bytes);

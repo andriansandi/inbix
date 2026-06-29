@@ -53,5 +53,24 @@ export const notificationPreferencesSchema = z.object({
   notifyOnNewMessage: z.boolean().optional(),
 });
 
+export const webhookEventSchema = z.enum([
+  "inbox.created",
+  "inbox.deleted",
+  "message.received",
+  "message.deleted",
+]);
+
+export const createWebhookSchema = z.object({
+  url: z.string().url(),
+  events: z.array(webhookEventSchema).min(1),
+});
+
+export const listApiLogsSchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(100).default(20),
+});
+
 export type PushSubscribeInput = z.infer<typeof pushSubscribeSchema>;
 export type NotificationPreferencesInput = z.infer<typeof notificationPreferencesSchema>;
+export type CreateWebhookInput = z.infer<typeof createWebhookSchema>;
+export type ListApiLogsInput = z.infer<typeof listApiLogsSchema>;

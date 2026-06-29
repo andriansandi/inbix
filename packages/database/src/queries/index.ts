@@ -287,7 +287,8 @@ export async function createApiKey(
   db: Database,
   name: string,
   keyHash: string,
-  prefix: string
+  prefix: string,
+  userId: string
 ) {
   const id = generateInboxId();
   const createdAt = Date.now();
@@ -296,10 +297,11 @@ export async function createApiKey(
     name,
     keyHash,
     prefix,
+    userId,
     createdAt,
     isActive: true,
   });
-  return { id, name, prefix, createdAt, lastUsedAt: null, isActive: true };
+  return { id, name, prefix, userId, createdAt, lastUsedAt: null, isActive: true };
 }
 
 export async function getApiKeyByHash(db: Database, keyHash: string) {
@@ -318,7 +320,7 @@ export async function updateApiKeyLastUsed(db: Database, id: string) {
     .where(eq(schema.apiKeys.id, id));
 }
 
-export async function listApiKeys(db: Database) {
+export async function listApiKeys(db: Database, userId: string) {
   return db
     .select({
       id: schema.apiKeys.id,
@@ -329,15 +331,15 @@ export async function listApiKeys(db: Database) {
       isActive: schema.apiKeys.isActive,
     })
     .from(schema.apiKeys)
-    .where(eq(schema.apiKeys.isActive, true))
+    .where(and(eq(schema.apiKeys.isActive, true), eq(schema.apiKeys.userId, userId)))
     .orderBy(desc(schema.apiKeys.createdAt));
 }
 
-export async function revokeApiKey(db: Database, id: string) {
+export async function revokeApiKey(db: Database, id: string, userId: string) {
   await db
     .update(schema.apiKeys)
     .set({ isActive: false })
-    .where(eq(schema.apiKeys.id, id));
+    .where(and(eq(schema.apiKeys.id, id), eq(schema.apiKeys.userId, userId)));
 }
 
 export async function getStats(db: Database) {
@@ -357,3 +359,4 @@ export async function getStats(db: Database) {
 }
 
 export * from "./notifications";
+export * from "./v02";

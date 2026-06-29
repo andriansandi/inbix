@@ -17,6 +17,8 @@ export type HonoEnv = {
   Variables: {
     requestId: string;
     userId?: string;
+    apiKeyId?: string;
+    authMethod?: "clerk" | "apikey";
   };
 };
 
