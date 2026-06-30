@@ -257,6 +257,140 @@ platform relies on the standard Web Push protocol.
 
 ---
 
+## v0.9 — AI Agents & Launch
+
+**Goal**: Position Inbix as the Email Infrastructure for Developers
+and AI Agents, preparing for the first public launch on Product Hunt.
+
+This milestone focuses on developer experience, MCP integration,
+documentation, examples, and launch readiness rather than adding
+enterprise features.
+
+### MCP Server
+
+Implement the official MCP Server package.
+
+Package: `@inbix/mcp-server`
+
+Supported transports:
+
+- STDIO
+- HTTP
+
+Initial tools:
+
+- [ ] `create_inbox`
+- [ ] `list_inboxes`
+- [ ] `read_inbox`
+- [ ] `read_message`
+- [ ] `wait_for_email`
+- [ ] `wait_for_otp`
+- [ ] `extract_verification_link`
+- [ ] `download_attachment`
+- [ ] `search_messages`
+- [ ] `delete_inbox`
+
+Goals:
+
+- Compatible with Claude Desktop
+- Compatible with Claude Code
+- Compatible with Cursor
+- Compatible with Windsurf
+- Compatible with VS Code MCP
+- Compatible with OpenAI-compatible MCP Clients
+
+### Developer Experience
+
+Improve first-time developer onboarding.
+
+Tasks:
+
+- [ ] One-minute Quick Start
+- [ ] API Quick Start
+- [ ] SDK Quick Start
+- [ ] MCP Quick Start
+- [ ] Interactive code examples
+- [ ] Copy-paste snippets
+- [ ] API playground
+- [ ] Better error messages
+- [ ] Consistent SDK APIs
+
+### Examples
+
+Create real-world examples.
+
+Examples:
+
+- [ ] Playwright email verification
+- [ ] Cypress email verification
+- [ ] Selenium OTP testing
+- [ ] GitHub Actions integration
+- [ ] Password reset automation
+- [ ] Magic Link authentication
+- [ ] OTP login testing
+- [ ] AI Agent receives email
+- [ ] AI Agent waits for OTP
+- [ ] AI Agent extracts verification link
+
+### Documentation
+
+Expand documentation.
+
+New docs:
+
+- [ ] MCP Guide
+- [ ] AI Agent Guide
+- [ ] Testing Guide
+- [ ] Automation Guide
+- [ ] Webhook Guide
+- [ ] SDK Reference
+- [ ] Authentication Guide
+- [ ] Deployment Examples
+
+### Homepage
+
+Improve product positioning.
+
+Tasks:
+
+- [ ] Reposition homepage around "Email Infrastructure"
+- [ ] Add AI Agent section
+- [ ] Add Testing section
+- [ ] Add Automation section
+- [ ] Add SDK section
+- [ ] Add MCP section
+- [ ] Add integrations section
+- [ ] Improve feature comparison
+- [ ] Add architecture diagram
+
+### Launch Readiness
+
+Prepare for Product Hunt launch.
+
+Tasks:
+
+- [ ] Public GitHub repository
+- [ ] OSS documentation review
+- [ ] CHANGELOG
+- [ ] Release notes
+- [ ] License review
+- [ ] Screenshots
+- [ ] Open Graph images
+- [ ] Favicon
+- [ ] Product Hunt assets
+- [ ] README polish
+
+### GitHub Issues for v0.9
+
+- #50 Official MCP Server
+- #51 Developer Experience improvements
+- #52 Documentation overhaul
+- #53 Examples repository
+- #54 Homepage positioning refresh
+- #55 Product Hunt launch preparation
+
+---
+
 ## v1.0 — Production
 
 **Goal**: Enterprise-ready, multi-tenant platform.
@@ -324,11 +458,23 @@ platform relies on the standard Web Push protocol.
 
 ## Product Vision
 
-Inbix is an Open Source Cloudflare-native Email API Platform.
+Inbix is an Open Source Cloudflare-native Email Infrastructure
+Platform.
+
+Disposable inboxes are only one capability. The platform is primarily
+designed for:
+
+- Developers
+- Test Automation
+- CI/CD
+- AI Agents
+- API Integrations
 
 The Dashboard is only one client. The REST API is the primary product.
 Everything must be accessible through public APIs. SDKs, Dashboard and MCP
 Server all consume the same APIs.
+
+REST API, SDKs and the MCP Server are first-class interfaces.
 
 ---
 
