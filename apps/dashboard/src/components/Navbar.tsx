@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, LayoutGrid, Inbox } from "lucide-react";
+import { Menu, X, LayoutGrid, Inbox, Bot } from "lucide-react";
 import { UserButton, SignedIn, SignedOut, useAuth, useClerk, useUser } from "@clerk/clerk-react";
-import { LogoMark } from "@inbix/ui";
+import { LogoMark, cn } from "@inbix/ui";
 import { ThemeToggle } from "./ThemeToggle";
 import { ChangelogTopbar } from "./ChangelogTopbar";
 
@@ -10,6 +10,12 @@ const navLinks = [
   { label: "Features", href: "/#features" },
   { label: "Pricing", to: "/pricing" },
   { label: "Docs", to: "/docs" },
+  {
+    label: "AI Agents",
+    to: "/#agents",
+    icon: Bot,
+    highlight: true,
+  },
 ];
 
 export function Navbar() {
@@ -30,25 +36,30 @@ export function Navbar() {
           </Link>
 
           <nav className="hidden items-center gap-6 lg:flex">
-            {navLinks.map((link) =>
-              link.to ? (
-                <Link
-                  key={link.label}
-                  to={link.to}
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
+            {navLinks.map((link) => {
+              const Icon = link.icon;
+              const content = (
+                <>
+                  {Icon && <Icon className="h-3.5 w-3.5" />}
                   {link.label}
+                </>
+              );
+              const className = cn(
+                "flex items-center gap-1.5 text-sm transition-colors",
+                link.highlight
+                  ? "font-medium text-primary hover:text-primary/80"
+                  : "text-muted-foreground hover:text-foreground"
+              );
+              return link.to ? (
+                <Link key={link.label} to={link.to} className={className}>
+                  {content}
                 </Link>
               ) : (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {link.label}
+                <a key={link.label} href={link.href} className={className}>
+                  {content}
                 </a>
-              )
-            )}
+              );
+            })}
             <a
               href="https://github.com/andriansandi/inbix"
               target="_blank"

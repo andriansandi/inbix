@@ -17,6 +17,7 @@ apps/web/public/*
 .env.*.local
 .dev.vars
 .dev.vars.*
+!.dev.vars.example
 
 # Cloudflare
 .wrangler/

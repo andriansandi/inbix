@@ -279,16 +279,16 @@ Supported transports:
 
 Initial tools:
 
-- [ ] `create_inbox`
-- [ ] `list_inboxes`
-- [ ] `read_inbox`
-- [ ] `read_message`
-- [ ] `wait_for_email`
-- [ ] `wait_for_otp`
-- [ ] `extract_verification_link`
-- [ ] `download_attachment`
-- [ ] `search_messages`
-- [ ] `delete_inbox`
+- [x] `create_inbox`
+- [x] `list_inboxes`
+- [x] `read_inbox`
+- [x] `read_message`
+- [x] `wait_for_email`
+- [x] `wait_for_otp`
+- [x] `extract_verification_link`
+- [x] `download_attachment`
+- [x] `search_messages`
+- [x] `delete_inbox`
 
 Goals:
 
@@ -308,7 +308,7 @@ Tasks:
 - [ ] One-minute Quick Start
 - [ ] API Quick Start
 - [ ] SDK Quick Start
-- [ ] MCP Quick Start
+- [x] MCP Quick Start
 - [ ] Interactive code examples
 - [ ] Copy-paste snippets
 - [ ] API playground
@@ -338,7 +338,7 @@ Expand documentation.
 
 New docs:
 
-- [ ] MCP Guide
+- [x] MCP Guide
 - [ ] AI Agent Guide
 - [ ] Testing Guide
 - [ ] Automation Guide
@@ -354,11 +354,11 @@ Improve product positioning.
 Tasks:
 
 - [ ] Reposition homepage around "Email Infrastructure"
-- [ ] Add AI Agent section
+- [x] Add AI Agent section
 - [ ] Add Testing section
 - [ ] Add Automation section
 - [ ] Add SDK section
-- [ ] Add MCP section
+- [x] Add MCP section
 - [ ] Add integrations section
 - [ ] Improve feature comparison
 - [ ] Add architecture diagram

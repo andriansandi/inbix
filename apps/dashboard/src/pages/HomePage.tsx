@@ -18,6 +18,7 @@ import {
   Webhook,
   Bot,
 } from "lucide-react";
+import { SiClaude, SiCursor, SiWindsurf } from "@icons-pack/react-simple-icons";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { Section } from "../components/Section";
@@ -186,6 +187,86 @@ export function HomePage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* Built for Agents */}
+      <Section id="agents" className="border-t border-border">
+        <div className="mx-auto max-w-6xl px-6 py-24 md:px-8">
+          <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-card/50 p-8 md:p-12 lg:p-16">
+            {/* Neon glow background */}
+            <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-primary/20 blur-[120px]" />
+            <div className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-cyan-500/15 blur-[120px]" />
+            <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-primary/10" />
+
+            <div className="relative grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-center lg:gap-12">
+              <div className="order-1 self-start lg:col-start-1 lg:row-start-1">
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/20">
+                  <Bot className="h-6 w-6 text-primary" />
+                </div>
+                <h2 className="text-4xl font-bold tracking-tight md:text-5xl">
+                  Built for Agents.
+                </h2>
+                <p className="mt-5 max-w-md text-lg text-muted-foreground">
+                  Connect Claude, Cursor, Windsurf, and any MCP-compatible client to Inbix.
+                  Let agents create inboxes, wait for OTPs, extract verification links, and
+                  clean up — no HTML parsing, no brittle selectors.
+                </p>
+              </div>
+
+              <div className="order-2 self-start lg:col-start-1 lg:row-start-2">
+                <div className="grid grid-cols-4 gap-3 sm:gap-4 lg:flex lg:flex-nowrap lg:justify-start lg:gap-4">
+                  {[
+                    { name: "Claude", icon: SiClaude, color: "#D97757" },
+                    { name: "Cursor", icon: SiCursor, color: "#E4E4E7" },
+                    { name: "Windsurf", icon: SiWindsurf, color: "#22D3EE" },
+                    { name: "VS Code", icon: Code2, color: "#60A5FA" },
+                  ].map(({ name, icon: Icon, color }) => (
+                    <div
+                      key={name}
+                      className="flex flex-col items-center gap-2 rounded-xl border border-border bg-background/60 px-3 py-3 backdrop-blur transition-colors hover:border-primary/30 hover:bg-background sm:px-5 sm:py-4"
+                    >
+                      <Icon className="h-6 w-6 sm:h-8 sm:w-8" style={{ color }} />
+                      <span className="hidden text-xs font-medium text-muted-foreground sm:block">{name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="order-3 lg:col-start-2 lg:row-start-1 lg:row-span-3">
+                <div className="relative overflow-hidden rounded-xl border border-primary/10 bg-black/60 p-6 font-mono text-sm leading-relaxed shadow-2xl shadow-primary/10 backdrop-blur">
+                  <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-primary/10" />
+                  <div className="relative space-y-2">
+                    <p>
+                      <span className="text-emerald-400">$</span>{" "}
+                      <span className="text-primary">create_inbox</span>
+                    </p>
+                    <p className="pl-4 text-muted-foreground">abc123@inbix.xyz</p>
+                    <p>
+                      <span className="text-emerald-400">$</span>{" "}
+                      <span className="text-primary">wait_for_otp</span>
+                    </p>
+                    <p className="pl-4 text-muted-foreground">OTP: 583921</p>
+                    <p>
+                      <span className="text-emerald-400">$</span>{" "}
+                      <span className="text-primary">delete_inbox</span>
+                    </p>
+                    <p className="pl-4 text-muted-foreground">cleaned up</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="order-4 self-start lg:col-start-1 lg:row-start-3">
+                <Link
+                  to="/docs?tab=mcp"
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 hover:shadow-primary/30 active:scale-[0.98]"
+                >
+                  Connect with MCP
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </Section>

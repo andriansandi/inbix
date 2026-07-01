@@ -1,0 +1,60 @@
+{
+  "name": "@inbix/mcp-server",
+  "version": "0.1.0",
+  "description": "Official MCP Server for Inbix — Open Source Cloudflare-native Email API Platform",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "inbix-mcp-server": "./dist/index.cjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/"
+  },
+  "keywords": [
+    "inbix",
+    "email",
+    "mcp",
+    "model-context-protocol",
+    "ai-agent",
+    "claude",
+    "cursor",
+    "disposable-email",
+    "cloudflare"
+  ],
+  "license": "MIT",
+  "homepage": "https://inbix.xyz",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andriansandi/inbix.git",
+    "directory": "packages/mcp-server"
+  },
+  "bugs": {
+    "url": "https://github.com/andriansandi/inbix/issues"
+  },
+  "dependencies": {
+    "@inbix/sdk": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.8.0"
+  }
+}

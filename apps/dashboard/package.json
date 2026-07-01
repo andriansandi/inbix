@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.6",
+    "@icons-pack/react-simple-icons": "^13.13.0",
     "@inbix/sdk": "workspace:*",
     "@inbix/shared": "workspace:*",
     "@inbix/ui": "workspace:*",

@@ -8,6 +8,49 @@ cd inbix
 pnpm install
 ```
 
+## Environment Setup
+
+The dashboard and the Worker need matching Clerk keys from the same Clerk application.
+
+### Dashboard (`apps/dashboard/.env`)
+
+Create `apps/dashboard/.env`:
+
+```env
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_your_clerk_publishable_key
+```
+
+This value must match the `CLERK_PUBLISHABLE_KEY` used by the Worker.
+
+### Worker (root `.dev.vars`)
+
+Create `.dev.vars` at the repo root:
+
+```env
+APP_DOMAIN=inbix.xyz
+CORS_ORIGIN=http://localhost:5176
+ENVIRONMENT=development
+CLERK_SECRET_KEY=sk_test_your_clerk_secret_key
+CLERK_PUBLISHABLE_KEY=pk_test_your_clerk_publishable_key
+VAPID_PUBLIC_KEY=your_vapid_public_key
+VAPID_PRIVATE_KEY=your_vapid_private_key
+VAPID_SUBJECT=mailto:noreply@inbix.xyz
+```
+
+`VAPID_*` keys are only required for local Web Push testing.
+
+### Local database
+
+If the local D1 database does not have tables, apply the migrations:
+
+```bash
+# Fresh local database (0002 is superseded by 0003, so it can be skipped)
+npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/database/migrations/0001_initial.sql
+npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/database/migrations/0003_add_missing_tables.sql
+npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/database/migrations/0004_notifications.sql
+npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/database/migrations/0005_v02_api_and_automation.sql
+```
+
 ## Running Locally
 
 ### Start Worker (API + Email handler)
@@ -114,6 +157,31 @@ curl -X POST http://localhost:8787/api/inboxes
 
 # The dashboard will show the inbox
 ```
+
+## Testing the MCP Server locally
+
+1. Start the local stack:
+
+```bash
+pnpm dev
+```
+
+2. Seed a local test API key:
+
+```bash
+npx wrangler d1 execute inbix --local --config wrangler.jsonc \
+  --command="INSERT OR REPLACE INTO api_keys (id, name, key_hash, prefix, user_id, created_at, last_used_at, is_active) VALUES ('key_local_test', 'Local Test Key', '7dff8481e8d2d24bdd50828893c621ebc1b342bbace3ea03854b0ec006e1f7f5', 'inbix_local', NULL, strftime('%s','now')*1000, NULL, 1)"
+```
+
+3. Run the smoke test:
+
+```bash
+node packages/mcp-server/scripts/smoke-test.cjs
+```
+
+This starts the MCP server via STDIO and calls `create_inbox` against `http://localhost:8791`.
+
+See [`docs/MCP.md`](./MCP.md) for full client configuration examples.
 
 ## Debugging
 

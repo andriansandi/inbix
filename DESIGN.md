@@ -449,7 +449,7 @@ inbix/
 |   +-- sdk/                # TypeScript SDK (@inbix/sdk)
 |   +-- shared/             # Shared types, constants, Zod schemas, utils
 |   +-- ui/                 # Shared shadcn/ui components
-|   +-- mcp-server/         # MCP Server (@inbix/mcp-server) [planned]
+|   +-- mcp-server/         # MCP Server (@inbix/mcp-server) [ready]
 |   +-- sdk-js/             # JavaScript SDK [planned]
 |   +-- sdk-python/         # Python SDK [planned]
 |   +-- sdk-go/             # Go SDK [planned]
