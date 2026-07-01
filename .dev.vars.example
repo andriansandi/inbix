@@ -1,0 +1,8 @@
+APP_DOMAIN=inbix.xyz
+CORS_ORIGIN=http://localhost:5176
+ENVIRONMENT=development
+CLERK_SECRET_KEY=sk_test_your_clerk_secret_key
+CLERK_PUBLISHABLE_KEY=pk_test_your_clerk_publishable_key
+VAPID_PUBLIC_KEY=your_vapid_public_key
+VAPID_PRIVATE_KEY=your_vapid_private_key
+VAPID_SUBJECT=mailto:noreply@inbix.xyz

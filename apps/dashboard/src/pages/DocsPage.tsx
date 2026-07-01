@@ -1,11 +1,18 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Terminal, Book, Code2, Zap, Copy, Check, ExternalLink, Package } from "lucide-react";
+import { Link, useSearchParams } from "react-router-dom";
+import { Terminal, Book, Code2, Zap, Copy, Check, ExternalLink, Package, Bot, ArrowRight } from "lucide-react";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@inbix/ui";
 import { cn } from "../lib/utils";
 
-type Tab = "quickstart" | "sdk" | "api";
+type Tab = "quickstart" | "sdk" | "api" | "mcp";
 
 const codeExamples: Record<string, string> = {
   install: `npm install @inbix/sdk`,
@@ -70,14 +77,56 @@ const unsubscribe = client.subscribeToInbox(
 // Later: unsubscribe
 unsubscribe();`,
   curl: `# Create an inbox
-curl -X POST https://inbix.xyz/api/inboxes \\
-  -H "Authorization: Bearer inbix_your_api_key" \\
-  -H "Content-Type: application/json" \\
+curl -X POST https://inbix.xyz/api/inboxes \
+  -H "Authorization: Bearer inbix_your_api_key" \
+  -H "Content-Type: application/json" \
   -d '{"domain": "inbix.xyz", "ttlSeconds": 3600}'
 
 # List messages
-curl https://inbix.xyz/api/inboxes/{inbox_id}/messages \\
+curl https://inbix.xyz/api/inboxes/{inbox_id}/messages \
   -H "Authorization: Bearer inbix_your_api_key"`,
+  mcpInstall: `npm install -g @inbix/mcp-server`,
+  mcpClaude: `{
+  "mcpServers": {
+    "inbix": {
+      "command": "npx",
+      "args": ["-y", "@inbix/mcp-server"],
+      "env": {
+        "INBIX_API_KEY": "inbix_your_api_key",
+        "INBIX_BASE_URL": "https://inbix.xyz"
+      }
+    }
+  }
+}`,
+  mcpCursor: `{
+  "mcpServers": {
+    "inbix": {
+      "command": "npx",
+      "args": ["-y", "@inbix/mcp-server"],
+      "env": {
+        "INBIX_API_KEY": "inbix_your_api_key"
+      }
+    }
+  }
+}`,
+  mcpWindsurf: `{
+  "mcpServers": {
+    "inbix": {
+      "command": "npx",
+      "args": ["-y", "@inbix/mcp-server"],
+      "env": {
+        "INBIX_API_KEY": "inbix_your_api_key"
+      }
+    }
+  }
+}`,
+  mcpWorkflow: `// Ask your agent to do this:
+
+1. create_inbox
+2. use the address for sign-up / OTP
+3. wait_for_otp (or wait_for_email)
+4. extract_verification_link if needed
+5. delete_inbox to clean up`,
 };
 
 function CodeBlock({ code, label }: { code: string; label?: string }) {
@@ -115,10 +164,24 @@ const tabs: { id: Tab; label: string; icon: typeof Zap }[] = [
   { id: "quickstart", label: "Quick Start", icon: Zap },
   { id: "sdk", label: "SDK Guide", icon: Code2 },
   { id: "api", label: "API Reference", icon: Book },
+  { id: "mcp", label: "MCP", icon: Bot },
 ];
 
 export function DocsPage() {
-  const [tab, setTab] = useState<Tab>("quickstart");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const validTabs: Tab[] = ["quickstart", "sdk", "api", "mcp"];
+  const initialTab = validTabs.includes(searchParams.get("tab") as Tab)
+    ? (searchParams.get("tab") as Tab)
+    : "quickstart";
+  const [tab, setTab] = useState<Tab>(initialTab);
+
+  const updateTab = (next: Tab) => {
+    setTab(next);
+    setSearchParams((prev) => {
+      prev.set("tab", next);
+      return prev;
+    });
+  };
 
   return (
     <div className="min-h-[100dvh] bg-background">
@@ -132,12 +195,12 @@ export function DocsPage() {
           </p>
         </div>
 
-        {/* Tabs */}
-        <div className="mb-8 flex gap-1 border-b border-border">
+        {/* Desktop tabs */}
+        <div className="mb-8 hidden gap-1 border-b border-border md:flex">
           {tabs.map((t) => (
             <button
               key={t.id}
-              onClick={() => setTab(t.id)}
+              onClick={() => updateTab(t.id)}
               className={cn(
                 "flex items-center gap-2 border-b-2 px-4 py-2.5 text-sm font-medium transition-colors",
                 tab === t.id
@@ -149,6 +212,22 @@ export function DocsPage() {
               {t.label}
             </button>
           ))}
+        </div>
+
+        {/* Mobile select */}
+        <div className="mb-8 md:hidden">
+          <Select value={tab} onValueChange={(value) => updateTab(value as Tab)}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select topic" />
+            </SelectTrigger>
+            <SelectContent>
+              {tabs.map((t) => (
+                <SelectItem key={t.id} value={t.id}>
+                  {t.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Quick Start */}
@@ -185,6 +264,23 @@ export function DocsPage() {
                 Prefer raw HTTP? The REST API works with any HTTP client.
               </p>
               <CodeBlock code={codeExamples.curl} label="Terminal" />
+            </section>
+
+            <section>
+              <div className="mb-3 flex items-center gap-2">
+                <Bot className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-semibold">Connect via MCP</h2>
+              </div>
+              <p className="mb-4 text-sm text-muted-foreground">
+                Use Inbix directly from Claude, Cursor, Windsurf, and other MCP-compatible AI agents. Create inboxes, wait for OTPs, and extract verification links without writing code.
+              </p>
+              <button
+                onClick={() => updateTab("mcp")}
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
+              >
+                Open MCP Guide
+                <ArrowRight className="h-4 w-4" />
+              </button>
             </section>
           </div>
         )}
@@ -346,6 +442,117 @@ export function DocsPage() {
                       <td className="py-2 pr-4 font-mono text-xs">120 req</td>
                       <td className="py-2 pr-4 text-muted-foreground">per minute</td>
                     </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        )}
+
+        {/* MCP */}
+        {tab === "mcp" && (
+          <div className="flex flex-col gap-8">
+            <section>
+              <div className="mb-3 flex items-center gap-2">
+                <Bot className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-semibold">Model Context Protocol</h2>
+              </div>
+              <p className="mb-4 text-sm text-muted-foreground">
+                Connect Claude, Cursor, Windsurf, and any MCP-compatible AI agent to Inbix. Generate inboxes, wait for emails, extract OTPs, and clean up — all through a standardized protocol.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {["Claude", "Cursor", "Windsurf", "VS Code"].map((client) => (
+                  <span
+                    key={client}
+                    className="inline-flex items-center rounded-md border border-border bg-muted/30 px-2.5 py-1 text-xs font-medium text-muted-foreground"
+                  >
+                    {client}
+                  </span>
+                ))}
+              </div>
+            </section>
+
+            <section>
+              <h3 className="mb-3 text-lg font-semibold">Install</h3>
+              <CodeBlock code={codeExamples.mcpInstall} label="Terminal" />
+              <p className="mt-3 text-sm text-muted-foreground">
+                Or let your MCP client run it directly with{" "}
+                <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">npx -y @inbix/mcp-server</code>.
+              </p>
+            </section>
+
+            <section>
+              <h3 className="mb-3 text-lg font-semibold">Get an API key</h3>
+              <p className="mb-4 text-sm text-muted-foreground">
+                MCP clients authenticate with an Inbix API key. Create one from the{" "}
+                <Link to="/settings" className="text-primary hover:underline">
+                  Settings page
+                </Link>{" "}
+                after signing in.
+              </p>
+            </section>
+
+            <section>
+              <h3 className="mb-3 text-lg font-semibold">Claude Desktop</h3>
+              <p className="mb-4 text-sm text-muted-foreground">
+                Add to your <code className="font-mono text-xs">claude_desktop_config.json</code>:
+              </p>
+              <CodeBlock code={codeExamples.mcpClaude} label="JSON" />
+            </section>
+
+            <section>
+              <h3 className="mb-3 text-lg font-semibold">Cursor</h3>
+              <p className="mb-4 text-sm text-muted-foreground">
+                Add to your Cursor MCP config (usually <code className="font-mono text-xs">~/.cursor/mcp.json</code>):
+              </p>
+              <CodeBlock code={codeExamples.mcpCursor} label="JSON" />
+            </section>
+
+            <section>
+              <h3 className="mb-3 text-lg font-semibold">Windsurf</h3>
+              <p className="mb-4 text-sm text-muted-foreground">
+                Add to your Windsurf config (usually <code className="font-mono text-xs">~/.codeium/windsurf/config.json</code>):
+              </p>
+              <CodeBlock code={codeExamples.mcpWindsurf} label="JSON" />
+            </section>
+
+            <section>
+              <h3 className="mb-3 text-lg font-semibold">Example workflow</h3>
+              <p className="mb-4 text-sm text-muted-foreground">
+                Once connected, ask your agent to handle an email-based flow end-to-end.
+              </p>
+              <CodeBlock code={codeExamples.mcpWorkflow} label="Agent prompt" />
+            </section>
+
+            <section>
+              <h3 className="mb-3 text-lg font-semibold">Available tools</h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border text-left text-muted-foreground">
+                      <th className="py-2 pr-4 font-medium">Tool</th>
+                      <th className="py-2 pr-4 font-medium">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ["create_inbox", "Create a new disposable inbox"],
+                      ["list_inboxes", "List existing inboxes"],
+                      ["read_inbox", "Get inbox details"],
+                      ["delete_inbox", "Delete an inbox"],
+                      ["list_inbox_messages", "List messages in an inbox"],
+                      ["read_message", "Read a message"],
+                      ["download_attachment", "Download an attachment"],
+                      ["wait_for_email", "Poll until an email arrives"],
+                      ["wait_for_otp", "Wait and extract an OTP"],
+                      ["extract_verification_link", "Extract verification links"],
+                      ["search_messages", "Search messages"],
+                    ].map(([tool, desc]) => (
+                      <tr key={tool} className="border-b border-border/50">
+                        <td className="py-2 pr-4 font-mono text-xs text-primary">{tool}</td>
+                        <td className="py-2 pr-4 text-muted-foreground">{desc}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

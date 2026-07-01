@@ -60,11 +60,39 @@ That's it. You now have a working disposable email service running on Cloudflare
 - Webhooks for event-driven workflows
 - Full-text search across messages
 - Official SDKs (Python, Go, PHP, Java, C#)
-- MCP Server for AI agents (Claude, Cursor, Windsurf)
+- ✅ MCP Server for AI agents (Claude, Cursor, Windsurf)
 - Stripe billing (Free, Pro, Team, Enterprise)
 - Team workspaces and shared inboxes
 - Multi-channel notifications (FCM, APNs, Telegram, Slack, Discord)
 - Analytics and audit logs
+
+## MCP Server
+
+Inbix has an official [Model Context Protocol](https://modelcontextprotocol.io) server for AI agents and MCP clients.
+
+```bash
+npm add -g @inbix/mcp-server
+```
+
+Add to your Claude Desktop config:
+
+```json
+{
+  "mcpServers": {
+    "inbix": {
+      "command": "npx",
+      "args": ["-y", "@inbix/mcp-server"],
+      "env": {
+        "INBIX_API_KEY": "inbix_your_api_key_here"
+      }
+    }
+  }
+}
+```
+
+Supported clients: Claude Desktop, Claude Code, Cursor, Windsurf, VS Code, and any STDIO-based MCP host.
+
+See the full [MCP Server guide](./docs/MCP.md) for configuration details and example workflows.
 
 ## Architecture
 
