@@ -4,7 +4,7 @@ Thank you for your interest in contributing to Inbix! This document covers every
 
 ## Prerequisites
 
-- Node.js 22+
+- Node.js 24+
 - pnpm 11+
 - A Cloudflare account (for testing Workers locally)
 - Git

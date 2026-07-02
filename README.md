@@ -28,6 +28,12 @@ Then follow the [Deployment Guide](https://github.com/andriansandi/inbix/wiki/De
 
 For local development, see the [Development Guide](https://github.com/andriansandi/inbix/wiki/Development).
 
+## Requirements
+
+- **Node.js** 24+ ([`.nvmrc`](./.nvmrc))
+- **pnpm** 11+ ([package.json](./package.json))
+- A **Cloudflare account** with a domain managed by Cloudflare DNS
+
 ## What is Inbix?
 
 Inbix is an open-source, Cloudflare-native email infrastructure platform. It gives you disposable, programmable inboxes that can be created and consumed through a REST API, TypeScript SDK, webhooks, and an official MCP server — making it ideal for developers, test automation, CI/CD, and AI agents.
@@ -181,7 +187,9 @@ inbix/
 
 ## Documentation
 
-All detailed documentation lives in the [GitHub Wiki](https://github.com/andriansandi/inbix/wiki):
+All detailed documentation lives in the [GitHub Wiki](https://github.com/andriansandi/inbix/wiki). The Wiki is kept in sync with this repository via [`.github/workflows/wiki-sync.yml`](./.github/workflows/wiki-sync.yml). To enable auto-sync, create a one-time repository secret named **`WIKI_PAT`** in `Settings → Secrets and variables → Actions` (use a Personal Access Token with `repo` scope).
+
+Wiki pages:
 
 - [Quick Start](https://github.com/andriansandi/inbix/wiki/Quick-Start)
 - [Deployment Guide](https://github.com/andriansandi/inbix/wiki/Deployment)

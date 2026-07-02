@@ -2,6 +2,14 @@
 
 ## Local Setup
 
+### Requirements
+
+- Node.js 24+ (see repo `.nvmrc`)
+- pnpm 11+
+- A Cloudflare account (for local D1/R2/KV emulation)
+
+### Install
+
 ```bash
 git clone https://github.com/andriansandi/inbix.git
 cd inbix
