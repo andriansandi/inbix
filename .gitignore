@@ -46,6 +46,7 @@ coverage/
 # Misc
 .turbo/
 cache/
+/wiki/
 
 # Agent skills
 .agents/

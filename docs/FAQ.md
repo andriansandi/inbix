@@ -49,7 +49,7 @@ Not currently. Inbix is Cloudflare-native by design, using D1, R2, KV, and Email
 For most users: $0/month on Cloudflare's free tier. For high-volume usage, Cloudflare Workers paid plan is $5/month and includes 10M requests.
 
 ### Can I restrict access to my instance?
-The MVP is open (no authentication). API key authentication is planned for v0.2. For now, you can restrict access via Cloudflare Access (Zero Trust).
+Authentication is available via Clerk (for dashboard access) and API keys (for automation and MCP). For admin-level restrictions or network-level access control, you can also use Cloudflare Access (Zero Trust).
 
 ### How do I update Inbix?
 ```bash
@@ -75,13 +75,13 @@ Delete the D1 database, R2 bucket, and KV namespaces via Wrangler. Or set very s
 
 ## Roadmap
 
-See the [README](../README.md#roadmap) for the full roadmap.
+See the [Roadmap](https://github.com/andriansandi/inbix/wiki/Roadmap) for the full plan.
 
 ### Will you add authentication?
-Yes. API key authentication is planned for v0.2. Admin dashboard with user accounts is planned for v1.0.
+Clerk authentication is available today. API key authentication is also implemented for automation and MCP. Admin dashboard with granular role-based access is planned for v1.0.
 
 ### Will you add webhooks?
-Yes, webhooks are planned for v0.3. You'll be able to configure a webhook URL per inbox to receive real-time notifications.
+Webhooks for inbox and message events are already supported. You can create webhooks via `POST /api/webhooks` or the dashboard.
 
 ### Will you add search?
 Yes, full-text search across messages is planned for v0.3.

@@ -41,14 +41,21 @@ VAPID_SUBJECT=mailto:noreply@inbix.xyz
 
 ### Local database
 
-If the local D1 database does not have tables, apply the migrations:
+If the local D1 database does not have tables, apply the migrations manually. `pnpm db:migrate` is currently not working, so use Wrangler directly:
 
 ```bash
-# Fresh local database (0002 is superseded by 0003, so it can be skipped)
 npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/database/migrations/0001_initial.sql
+npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/database/migrations/0002_add_user_id.sql
 npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/database/migrations/0003_add_missing_tables.sql
 npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/database/migrations/0004_notifications.sql
 npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/database/migrations/0005_v02_api_and_automation.sql
+```
+
+Then seed the default domain:
+
+```bash
+npx wrangler d1 execute inbix --local --config wrangler.jsonc \
+  --command="INSERT OR IGNORE INTO domains (id, domain, is_default, is_verified, created_at) VALUES ('domain_inbix_xyz', 'inbix.xyz', 1, 1, strftime('%s','now')*1000)"
 ```
 
 ## Running Locally
@@ -59,7 +66,7 @@ npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/da
 pnpm --filter @inbix/web dev
 ```
 
-This runs `wrangler dev` which starts a local Worker at `http://localhost:8787` with local D1, R2, and KV emulated by Miniflare.
+This runs `wrangler dev` which starts a local Worker at `http://localhost:8791` with local D1, R2, and KV emulated by Miniflare.
 
 ### Start Dashboard
 
@@ -67,7 +74,7 @@ This runs `wrangler dev` which starts a local Worker at `http://localhost:8787` 
 pnpm --filter @inbix/dashboard dev
 ```
 
-This runs Vite dev server at `http://localhost:5173` with API requests proxied to the Worker.
+This runs Vite dev server at `http://localhost:5176` with `/api` requests proxied to the Worker.
 
 ### Run Both Simultaneously
 
@@ -87,11 +94,11 @@ pnpm dev
 ## Common Commands
 
 ```bash
-pnpm typecheck       # Type check all packages
+pnpm typecheck       # Type check all packages (run before PR)
 pnpm build           # Build all packages
-pnpm lint            # Lint all packages
-pnpm db:generate     # Generate D1 migration from schema changes
-pnpm db:migrate      # Run D1 migrations
+pnpm lint            # Lint all packages (eslint may not be installed in some envs)
+pnpm db:generate     # Generate D1 migration from schema changes (currently broken, write SQL manually)
+pnpm db:migrate      # Run D1 migrations (currently broken, use wrangler d1 execute)
 pnpm db:studio       # Open Drizzle Studio (visual DB browser)
 pnpm --filter @inbix/web tail  # View live Worker logs
 ```
@@ -101,14 +108,11 @@ pnpm --filter @inbix/web tail  # View live Worker logs
 ### Modifying Schema
 
 1. Edit `packages/database/src/schema/index.ts`
-2. Generate migration:
+2. Write the migration SQL manually in `packages/database/migrations/`
+3. Update `packages/database/migrations/meta/_journal.json`
+4. Apply the migration locally:
    ```bash
-   pnpm db:generate
-   ```
-3. Review the generated SQL in `packages/database/migrations/`
-4. Apply migration:
-   ```bash
-   pnpm db:migrate
+   npx wrangler d1 execute inbix --local --config wrangler.jsonc --file=packages/database/migrations/XXXX_your_migration.sql
    ```
 
 ### Drizzle Studio
@@ -153,7 +157,7 @@ pnpm deploy
 Use the API to test the dashboard without real emails:
 ```bash
 # Create an inbox
-curl -X POST http://localhost:8787/api/inboxes
+curl -X POST http://localhost:8791/api/inboxes
 
 # The dashboard will show the inbox
 ```

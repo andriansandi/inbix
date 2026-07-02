@@ -18,9 +18,12 @@ This keeps deployment simple (one `wrangler deploy`) and costs low (one Worker).
 
 The React dashboard is built as a static SPA and served via Workers Static Assets (`ASSETS` binding). The build output goes to `apps/web/public/`. The `not_found_handling = "single-page-application"` setting enables client-side routing.
 
-### Real-time via SSE
+### Real-time
 
-Instead of WebSockets or Durable Objects, Inbix uses Server-Sent Events (SSE) for real-time message updates. The SSE endpoint polls D1 for new messages and streams them to the client. This avoids the complexity and cost of Durable Objects while still providing real-time UX.
+Inbix supports two realtime transports:
+
+- **Server-Sent Events (SSE)** — `GET /api/inboxes/:id/events` polls D1 for new messages and streams them to the client. Lightweight and sufficient for most dashboard use cases.
+- **WebSocket** — `GET /api/inboxes/:id/ws` upgrades to a Durable Object room, providing sub-second updates for automation and high-volume scenarios.
 
 ## Request Flow
 
@@ -124,14 +127,9 @@ On every request, the Worker schedules (via `ctx.waitUntil`) a background cleanu
 @inbix/dashboard  ← React SPA (depends on shared, sdk, ui)
 ```
 
-## Why Not Durable Objects?
+## Realtime Evolution
 
-Durable Objects add complexity and cost. For the MVP:
-- SSE polling (every 30s) is sufficient for real-time UX
-- D1 handles concurrent reads well
-- DO would be justified for: sub-second real-time, per-inbox state machines, or complex coordination
-
-DO support is planned for v0.3 if polling proves insufficient.
+The first iterations of Inbix relied on SSE polling to keep the dashboard simple and cost-effective on the Cloudflare free tier. As the platform added automation and AI-agent use cases, WebSocket support through Durable Objects was introduced for sub-second realtime updates. SSE remains the default dashboard transport; WebSocket is available for clients that need lower latency.
 
 ## Cost Model (Cloudflare Free Tier)
 

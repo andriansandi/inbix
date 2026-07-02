@@ -78,13 +78,24 @@ Copy both namespace IDs into `wrangler.jsonc` (at the repo root):
 
 ### 6. Run Database Migrations
 
+`pnpm db:migrate` is currently not working, so apply migrations manually with Wrangler:
+
 ```bash
-pnpm db:migrate
+npx wrangler d1 execute inbix --config wrangler.jsonc --file=packages/database/migrations/0001_initial.sql
+npx wrangler d1 execute inbix --config wrangler.jsonc --file=packages/database/migrations/0002_add_user_id.sql
+npx wrangler d1 execute inbix --config wrangler.jsonc --file=packages/database/migrations/0003_add_missing_tables.sql
+npx wrangler d1 execute inbix --config wrangler.jsonc --file=packages/database/migrations/0004_notifications.sql
+npx wrangler d1 execute inbix --config wrangler.jsonc --file=packages/database/migrations/0005_v02_api_and_automation.sql
 ```
 
-This creates all tables (inboxes, messages, attachments, api_keys, domains, users) in your D1 database.
+Then seed the default domain:
 
-### 7. Update Environment Variables
+```bash
+npx wrangler d1 execute inbix --config wrangler.jsonc \
+  --command="INSERT OR IGNORE INTO domains (id, domain, is_default, is_verified, created_at) VALUES ('domain_inbix_xyz', 'inbix.xyz', 1, 1, strftime('%s','now')*1000)"
+```
+
+### 7. Update Environment Variables & Secrets
 
 Edit `wrangler.jsonc` (at the repo root) `vars` section:
 
@@ -92,9 +103,22 @@ Edit `wrangler.jsonc` (at the repo root) `vars` section:
 "vars": {
   "ENVIRONMENT": "production",
   "APP_DOMAIN": "yourdomain.com",
-  "CORS_ORIGIN": "https://yourdomain.com"
+  "CORS_ORIGIN": "https://yourdomain.com",
+  "CLERK_PUBLISHABLE_KEY": "pk_live_...",
+  "VAPID_PUBLIC_KEY": "...",
+  "VAPID_SUBJECT": "mailto:noreply@yourdomain.com"
 }
 ```
+
+Set sensitive values as secrets via Wrangler:
+
+```bash
+npx wrangler secret put CLERK_SECRET_KEY
+npx wrangler secret put VAPID_PRIVATE_KEY
+```
+
+- `CLERK_SECRET_KEY` — Clerk backend secret (dashboard auth).
+- `VAPID_PRIVATE_KEY` — Web Push private key (required for browser push notifications).
 
 ### 8. Deploy
 
@@ -180,7 +204,8 @@ To update Inbix to the latest version:
 ```bash
 git pull origin main
 pnpm install
-pnpm db:migrate  # Apply any new migrations
+# Apply any new migrations manually — pnpm db:migrate is currently not working
+npx wrangler d1 execute inbix --config wrangler.jsonc --file=packages/database/migrations/XXXX_latest.sql
 pnpm deploy
 ```
 
@@ -192,18 +217,20 @@ pnpm --filter @inbix/web dev
 
 # Terminal 2: Start the Dashboard (Vite dev server with API proxy)
 pnpm --filter @inbix/dashboard dev
+
+# Or run both via turbo
+pnpm dev
 ```
 
-Dashboard: `http://localhost:5173`
-Worker API: `http://localhost:8787`
+Dashboard: `http://localhost:5176`
+Worker API: `http://localhost:8791`
 
 ### Local Email Testing
 
-Cloudflare's local dev (`wrangler dev`) does not support the `email()` handler. To test email reception locally:
+Cloudflare's local dev (`wrangler dev`) does not support the `email()` handler. To test email reception:
 
-1. Use `wrangler dev` for API testing
-2. Deploy to a staging Worker for email testing
-3. Or use the API to manually insert test messages
+1. Deploy to a staging Worker and send real emails there, or
+2. Use the API to manually create inboxes and insert test messages.
 
 ## Troubleshooting
 
