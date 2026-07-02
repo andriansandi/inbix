@@ -5,7 +5,7 @@ This guide walks through deploying Inbix to Cloudflare from scratch.
 ## Prerequisites
 
 1. **Cloudflare Account** — [Sign up](https://dash.cloudflare.com/sign-up) (free tier is sufficient)
-2. **Node.js 22+** — [Download](https://nodejs.org) (required by pnpm 11's `node:sqlite`)
+2. **Node.js 24+** — [Download](https://nodejs.org) (required by pnpm 11's `node:sqlite`; see repo `.nvmrc`)
 3. **pnpm** — `npm install -g pnpm`
 4. **Domain in Cloudflare** — Your domain must use Cloudflare DNS for Email Routing
 

@@ -19,18 +19,31 @@ jobs:
   sync:
     name: Sync docs to GitHub Wiki
     runs-on: ubuntu-latest
+    env:
+      WIKI_PAT: ${{ secrets.WIKI_PAT }}
     steps:
+      - name: Check WIKI_PAT secret
+        if: env.WIKI_PAT == ''
+        run: |
+          echo "::error::WIKI_PAT secret is missing. Add it in Settings → Secrets and variables → Actions."
+          exit 1
+
       - name: Checkout main repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 1
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
       - name: Checkout wiki repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: andriansandi/inbix.wiki
           path: wiki
-          token: ${{ secrets.WIKI_PAT }}
+          token: ${{ env.WIKI_PAT }}
 
       - name: Sync documentation files
         run: bash scripts/sync-wiki.sh

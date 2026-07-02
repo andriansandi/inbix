@@ -7,6 +7,7 @@ Monorepo: pnpm workspaces + turbo. Single Cloudflare Worker serves API + SPA.
 
 - Repo: `git@github.com:andriansandi/inbix.git`
 - Production: `https://inbix.xyz`
+- Minimum Node.js version: **24** (see `.nvmrc`)
 
 ## Local Development
 
@@ -49,6 +50,7 @@ npx wrangler d1 execute inbix --local --config wrangler.jsonc --command="INSERT 
 - User merges via GitHub UI
 - After merge: `git checkout main && git pull`
 - Deployment is done via GitHub (CI/CD), NOT manual `wrangler deploy`
+- The `wiki-sync.yml` workflow requires a repository secret named `WIKI_PAT` (PAT with `repo` scope) to push docs to the GitHub Wiki
 - User communicates in Indonesian; respond in same language
 - **At the start of every session: run `pnpm dev` locally to ensure web + API are running before starting any work**
 - Run `pnpm typecheck` before PR
